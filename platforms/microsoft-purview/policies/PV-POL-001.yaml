@@ -1,0 +1,68 @@
+policy_id: PV-POL-001
+name: "PV-POL-001 External email - bank account data"
+status: designed
+lab_tested: false
+use_cases: [UC-001]
+control_objectives: [CO-02]
+intent: >
+  Prevent client account data (CH and LU IBANs) from leaving the organisation by email in bulk,
+  while letting single-account business correspondence flow with user awareness.
+protected_data: [DC-04, DC-05, DC-01]
+locations:
+  exchange: All
+scope:
+  include: All users
+  exclude: []
+rules:
+  - rule_id: PV-POL-001-R1
+    name: Low volume notify
+    conditions:
+      content_contains:
+        - sit: International banking account number (IBAN)
+          min_count: 1
+          max_count: 4
+          min_confidence: 85
+      access_scope: NotInOrganization
+    actions: [audit]
+    user_notification: policy tip
+    alert: false
+    severity: Low
+  - rule_id: PV-POL-001-R2
+    name: Medium volume block with justification
+    conditions:
+      content_contains:
+        - sit: International banking account number (IBAN)
+          min_count: 5
+          max_count: 19
+          min_confidence: 85
+      access_scope: NotInOrganization
+    actions: [block, allow_override_with_justification]
+    user_notification: policy tip + email
+    alert: true
+    severity: Medium
+  - rule_id: PV-POL-001-R3
+    name: High volume strict block
+    conditions:
+      content_contains:
+        - sit: International banking account number (IBAN)
+          min_count: 20
+          min_confidence: 85
+      access_scope: NotInOrganization
+    actions: [block]
+    user_notification: policy tip + email
+    alert: true
+    severity: High
+exceptions:
+  - type: recipient_domain_in
+    source: exception register (EXC-yyyy-nnn), approved correspondent domains
+deployment:
+  current_stage: S0
+  mode: TestWithoutNotifications
+test_protocol: [TC-001, TC-002, TC-003]
+promotion_criteria: See platforms/microsoft-purview/README.md, controlled rollout
+owner: Head of Client Data
+review_frequency: Quarterly, and after any business process change
+license_dependency: Exchange DLP (E3 or equivalent)
+known_limits:
+  - IBANs inside password-protected archives are not inspected.
+  - IBANs in images require OCR capability (not assumed).

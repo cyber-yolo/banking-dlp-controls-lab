@@ -1,0 +1,62 @@
+uc_id: UC-001
+title: Bulk client account data sent by external email
+status: draft
+control_objectives: [CO-02]
+business_risk: >
+  A staff member sends a file or message containing many client IBANs with client
+  names to an external recipient (personal address, wrong recipient, non-approved third party).
+  Consequences: banking or professional secrecy breach, personal data breach, reputational damage.
+user_scenario: >
+  An operations analyst exports a reconciliation list (client name, client ID, IBAN, balance)
+  and emails it to a personal address to work from home.
+jurisdiction: [CH, LU]
+segments: [retail, private banking]
+data_categories: [DC-04, DC-05, DC-01]
+channel: Exchange Online, outbound to recipients outside the organisation
+target_population: All staff
+prerequisites:
+  - Taxonomy L2/L3 approved
+  - Approved external domains list maintained by Payments (correspondent banks, processors)
+  - User notification text validated by HR, Legal and staff representatives where required
+detection:
+  conditions:
+    - Content contains CH or LU IBAN with valid checksum
+    - Recipient outside the organisation
+  thresholds:
+    notify: 1-4 IBANs
+    block_with_justification: 5-19 IBANs
+    strict_block: 20 or more IBANs
+  confidence: High (checksum-validated identifier)
+  supporting_evidence: Client ID pattern (CLT-########) or client keywords increase severity
+actions:
+  - range: 1-4
+    action: Allow, policy tip to sender, audit
+  - range: 5-19
+    action: Block, sender may override with business justification
+  - range: 20+
+    action: Block, no override
+notification:
+  user: Policy tip and email notification with link to the data handling guideline
+  admin: Alert for 5+; incident report to DLP analyst queue
+severity: {"1-4": Low, "5-19": Medium, "20+": High}
+exceptions:
+  - Recipient domains on the approved correspondent list (via exception register, max 6 months)
+  - Payments team sending to processors via approved encrypted channel (not email)
+owner: Head of Client Data
+expected_evidence:
+  - Policy export (sanitised) showing conditions and thresholds
+  - Activity Explorer events for each test file
+  - Alert with severity matching the range
+tests:
+  positive: TC-001 (10 IBANs, external recipient, expect block with justification)
+  negative: TC-002 (no sensitive data, external recipient, expect no match)
+  boundary: TC-003 (4 vs 5 IBANs, expect notify vs block)
+  additional:
+    - Context test, IBANs without client keywords (SCN-006)
+    - False positive, IBAN-like strings with invalid checksum (SCN-005)
+    - Internal recipient, same file (expect no action)
+acceptance_criteria:
+  - Positive, negative and boundary tests pass on 2 consecutive runs
+  - False positive rate below 10% on the lab regression set
+  - Justification text captured in the event record
+  - Threshold rationale documented and approved by owner

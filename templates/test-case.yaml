@@ -1,0 +1,16 @@
+test_id: TC-XXX
+type: ""                    # positive | negative | boundary | context | multi-data | exception | false-positive | false-negative | channel | regression
+use_case_id: UC-XXX
+policy: ""
+platform: ""
+preconditions: []
+test_data:
+  scenario: SCN-XXX
+  file: ""
+  occurrences: {}
+  sha256: "<from output/manifest.json>"
+steps: []
+expected: {}
+actual: ""
+status: NOT RUN             # NOT RUN | PASS | FAIL | BLOCKED | N/A
+evidence: []

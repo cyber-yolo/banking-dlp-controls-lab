@@ -1,0 +1,21 @@
+test_id: TC-002
+type: negative
+use_case_id: UC-001
+policy: PV-POL-001
+platform: Microsoft Purview
+preconditions:
+  - Same as TC-001
+test_data:
+  scenario: SCN-004
+  file: SCN-004_UC-001_negative.docx
+  occurrences: {}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Send the file to the external test mailbox as in TC-001.
+expected:
+  all_stages: Delivered; no policy tip; no DLP rule match for PV-POL-001
+  alert: none
+note: The marker text contains CUSTOMER. A match here would reveal a detector keyword collision with the marker (see generator README).
+actual: ""
+status: NOT RUN
+evidence: []

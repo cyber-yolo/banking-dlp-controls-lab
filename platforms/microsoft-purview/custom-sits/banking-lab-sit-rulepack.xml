@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Custom SIT rule package for banking-dlp-controls-lab (synthetic formats only).
+  Status: designed, NOT imported. Validate in a lab tenant with:
+    New-DlpSensitiveInformationTypeRulePackage -FileData ([System.IO.File]::ReadAllBytes("<path>"))
+  If import fails on encoding, re-save the file as Unicode (UTF-16) as described in Microsoft docs.
+  GUIDs are random and carry no tenant information.
+-->
+<RulePackage xmlns="http://schemas.microsoft.com/office/2011/mce">
+  <RulePack id="154c0605-c542-4abf-8c54-4633acb03873">
+    <Version major="1" minor="0" build="0" revision="0"/>
+    <Publisher id="c6fd2491-bef2-4525-a64a-bc7e031c3121"/>
+    <Details defaultLangCode="en-us">
+      <LocalizedDetails langcode="en-us">
+        <PublisherName>banking-dlp-controls-lab</PublisherName>
+        <Name>Banking lab custom SITs</Name>
+        <Description>Synthetic client ID, portfolio ID and AML vocabulary detectors for lab testing.</Description>
+      </LocalizedDetails>
+    </Details>
+  </RulePack>
+  <Rules>
+    <!-- Client ID: CLT-######## ; high confidence requires client context keywords -->
+    <Entity id="94b12326-e015-4489-bd4d-0ee115d3e40a" patternsProximity="300" recommendedConfidence="85">
+      <Pattern confidenceLevel="85">
+        <IdMatch idRef="Regex_client_id"/>
+        <Match idRef="Keyword_client_context"/>
+      </Pattern>
+      <Pattern confidenceLevel="65">
+        <IdMatch idRef="Regex_client_id"/>
+      </Pattern>
+    </Entity>
+    <!-- Portfolio ID: PF-##-###### -->
+    <Entity id="54bcaf97-eb97-437d-ad3f-0c47bec353f1" patternsProximity="300" recommendedConfidence="75">
+      <Pattern confidenceLevel="75">
+        <IdMatch idRef="Regex_portfolio_id"/>
+        <Match idRef="Keyword_portfolio_context"/>
+      </Pattern>
+    </Entity>
+    <!-- AML vocabulary near a client ID (tipping-off use case UC-010) -->
+    <Entity id="128b5aa1-849f-4b47-9b36-2adec1a598b6" patternsProximity="300" recommendedConfidence="85">
+      <Pattern confidenceLevel="85">
+        <IdMatch idRef="Regex_client_id"/>
+        <Match idRef="Keyword_aml_vocabulary"/>
+      </Pattern>
+    </Entity>
+    <Regex id="Regex_client_id">\bCLT-\d{8}\b</Regex>
+    <Regex id="Regex_portfolio_id">\bPF-\d{2}-\d{6}\b</Regex>
+    <Keyword id="Keyword_client_context">
+      <Group matchStyle="word">
+        <Term>client</Term>
+        <Term>client ID</Term>
+        <Term>numero client</Term>
+        <Term>Kundennummer</Term>
+        <Term>relationship manager</Term>
+      </Group>
+    </Keyword>
+    <Keyword id="Keyword_portfolio_context">
+      <Group matchStyle="word">
+        <Term>portfolio</Term>
+        <Term>portefeuille</Term>
+        <Term>Depot</Term>
+        <Term>holdings</Term>
+        <Term>valuation</Term>
+      </Group>
+    </Keyword>
+    <Keyword id="Keyword_aml_vocabulary">
+      <Group matchStyle="word">
+        <Term>suspicious activity report</Term>
+        <Term>suspicious transaction report</Term>
+        <Term>SAR</Term>
+        <Term>STR</Term>
+        <Term>declaration de soupcon</Term>
+        <Term>CRF</Term>
+        <Term>MROS</Term>
+        <Term>Verdachtsmeldung</Term>
+        <Term>money laundering</Term>
+        <Term>blanchiment</Term>
+      </Group>
+    </Keyword>
+    <LocalizedStrings>
+      <Resource idRef="94b12326-e015-4489-bd4d-0ee115d3e40a">
+        <Name default="true" langcode="en-us">Custom - Client ID (CLT)</Name>
+        <Description default="true" langcode="en-us">Synthetic client identifier CLT-######## with client context.</Description>
+      </Resource>
+      <Resource idRef="54bcaf97-eb97-437d-ad3f-0c47bec353f1">
+        <Name default="true" langcode="en-us">Custom - Portfolio ID (PF)</Name>
+        <Description default="true" langcode="en-us">Synthetic portfolio identifier PF-##-###### with portfolio context.</Description>
+      </Resource>
+      <Resource idRef="128b5aa1-849f-4b47-9b36-2adec1a598b6">
+        <Name default="true" langcode="en-us">Custom - AML vocabulary with client ID</Name>
+        <Description default="true" langcode="en-us">AML suspicion vocabulary within proximity of a client identifier.</Description>
+      </Resource>
+    </LocalizedStrings>
+  </Rules>
+</RulePackage>

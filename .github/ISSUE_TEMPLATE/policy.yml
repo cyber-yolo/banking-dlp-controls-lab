@@ -1,0 +1,34 @@
+name: Policy
+description: Design, change or test a vendor DLP policy
+title: "[POL] "
+labels: ["type/policy"]
+body:
+  - type: input
+    id: policy_id
+    attributes:
+      label: Policy ID
+      placeholder: PV-POL-004
+    validations:
+      required: true
+  - type: input
+    id: use_cases
+    attributes:
+      label: Linked use cases
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: ["Microsoft Purview", "Symantec DLP"]
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Target deployment stage
+      options: ["S1 simulation", "S2 simulation + tips", "S3 pilot", "S4 block with justification", "S5 strict block"]
+  - type: textarea
+    id: change
+    attributes:
+      label: Change description and expected effect
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests to run (TC-xxx) and regression scope

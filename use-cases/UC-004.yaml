@@ -1,0 +1,54 @@
+uc_id: UC-004
+title: Client or KYC data submitted to public generative AI tools
+status: draft
+control_objectives: [CO-05]
+business_risk: >
+  Staff paste client data, KYC extracts, AML narratives or credentials into public GenAI tools.
+  Data leaves the bank's contractual perimeter, may cross borders and may be retained by the provider.
+user_scenario: >
+  A KYC analyst pastes a client's source-of-wealth narrative into a public chatbot to summarise it.
+jurisdiction: [CH, LU]
+segments: [all]
+data_categories: [DC-01, DC-02, DC-03, DC-19, DC-21]
+channel: Endpoint browser, paste to browser and file upload to non-sanctioned GenAI domains
+target_population: All staff
+prerequisites:
+  - Sanctioned AI tools list approved (for example the bank's enterprise assistant)
+  - Service domain group "Non-sanctioned GenAI" maintained by Security
+  - Supported browser deployed (Edge; Chrome/Firefox with the Purview extension)
+  - Acceptable use policy for AI communicated
+detection:
+  conditions:
+    - Content contains client ID with context, KYC keywords, AML vocabulary, credentials, or L3/L4 label
+    - Destination domain in the non-sanctioned GenAI group
+  thresholds:
+    block: 1 occurrence for L4 or credentials; client ID with context for L3
+    audit: any L1/L2 content
+  confidence: Medium to High depending on detector
+actions:
+  - condition: L4 or credentials
+    action: Block, no override
+  - condition: L3
+    action: Block with justification
+  - condition: L1/L2
+    action: Audit
+notification:
+  user: Browser notification pointing to the sanctioned AI tool
+  admin: Alert for L4 and credentials
+severity: High
+exceptions:
+  - None for L4. L3 exceptions only for tools with an approved contract and DPA.
+owner: CISO + DPO
+expected_evidence:
+  - Service domain group configuration
+  - Activity Explorer events for paste and upload attempts
+  - Screenshot of block notification (redacted)
+tests:
+  positive: Paste SCN-009 KYC text into a public GenAI site (expect block with justification)
+  positive_l4: Paste SCN-008 fake credentials (expect strict block)
+  negative: Paste SCN-004 negative text (expect allow)
+  channel: Same content to sanctioned AI tool (expect allow + audit)
+acceptance_criteria:
+  - Paste and upload both covered on the supported browser
+  - Unsupported browser behaviour documented (block or allow) as a known limit
+  - No block on sanctioned tool

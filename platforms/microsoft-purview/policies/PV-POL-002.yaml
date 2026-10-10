@@ -1,0 +1,53 @@
+policy_id: PV-POL-002
+name: "PV-POL-002 Endpoint egress - restricted data"
+status: designed
+lab_tested: false
+use_cases: [UC-002, UC-003, UC-007, UC-008, UC-009]
+control_objectives: [CO-04, CO-05]
+intent: >
+  Control copy, print and upload of L3/L4 banking data from managed Windows endpoints,
+  with approved devices, printers and cloud domains as the only permitted routes.
+protected_data: [DC-01, DC-02, DC-10, DC-11, DC-14, DC-20, DC-21]
+locations:
+  endpoint: All onboarded devices
+scope:
+  include: All users
+  exclude: []
+detection:
+  any_of:
+    - label_in: [L3, L4]
+    - sit: International banking account number (IBAN)
+      min_count: 5
+    - sit: Custom - Client ID (CLT)
+      min_count: 1
+      min_confidence: 85
+    - fingerprint: Synthetic KYC form v1
+endpoint_settings_required:
+  removable_storage_groups: [Approved encrypted USB]
+  printer_groups: [Approved secure print]
+  service_domain_groups: [Sanctioned cloud storage, Personal webmail, Non-sanctioned cloud storage]
+  restricted_apps: [Unsanctioned sync clients]
+activities:
+  copy_to_removable_usb: {default: block, approved_group: audit}
+  print: {default: block_with_override, approved_group: audit}
+  upload_to_cloud_domain: {sanctioned: audit, personal_webmail: block_with_override, non_sanctioned: block_with_override}
+  copy_to_network_share: {default: audit}
+  access_by_restricted_apps: {default: block}
+  paste_to_browser: {default: audit}
+notifications:
+  user: Endpoint notification with guideline link
+alerts:
+  block_events: Medium
+  l4_events: High
+  aggregation: Alert when 10 or more matching events by one user in 1 hour (UC-009 signal)
+deployment:
+  current_stage: S0
+  mode: TestWithoutNotifications
+test_protocol: [TC-004, TC-005, TC-006, TC-007]
+promotion_criteria: See README controlled rollout; endpoint health above 95% of in-scope lab devices before S3
+owner: CISO
+review_frequency: Quarterly
+license_dependency: Endpoint DLP (E5 / E5 Compliance)
+known_limits:
+  - Unmanaged and non-onboarded devices are out of scope.
+  - Browser coverage depends on supported browsers and extensions.

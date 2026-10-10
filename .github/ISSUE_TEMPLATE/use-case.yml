@@ -1,0 +1,42 @@
+name: Use case
+description: Propose or update a DLP banking use case
+title: "[UC] "
+labels: ["type/use-case", "platform/agnostic"]
+body:
+  - type: input
+    id: uc_id
+    attributes:
+      label: Use case ID
+      placeholder: UC-016
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Business risk and scenario
+    validations:
+      required: true
+  - type: input
+    id: channel
+    attributes:
+      label: Channel(s)
+  - type: input
+    id: data
+    attributes:
+      label: Data categories (DC-xx)
+  - type: dropdown
+    id: jurisdiction
+    attributes:
+      label: Jurisdiction
+      options: ["CH", "LU", "CH+LU"]
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety
+      options:
+        - label: The description contains no real data and no bypass technique
+          required: true

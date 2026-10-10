@@ -1,0 +1,25 @@
+test_id: TC-001
+type: positive
+use_case_id: UC-001
+policy: PV-POL-001-R2
+platform: Microsoft Purview
+preconditions:
+  - PV-POL-001 deployed in the lab, mode recorded (S1 simulation or later)
+  - Configuration exported with Export-DlpConfiguration.ps1
+  - Sender is a lab user in scope; recipient is the external test mailbox
+test_data:
+  scenario: SCN-001
+  file: SCN-001_UC-001_positive.docx
+  occurrences: {iban: 10}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Compose an email from the lab sender to the external test mailbox, attach the file, send.
+  - Record the UTC send time.
+  - Wait for event ingestion; search Activity Explorer for the sender and time window.
+expected:
+  S1: No user impact; event shows match on rule PV-POL-001-R2 (simulation)
+  S2_or_later: Policy tip; send blocked; override with justification offered
+  alert: Medium severity alert (S3 and later)
+actual: ""
+status: NOT RUN
+evidence: []

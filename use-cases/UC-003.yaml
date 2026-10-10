@@ -1,0 +1,51 @@
+uc_id: UC-003
+title: Client data copied to USB removable media
+status: draft
+control_objectives: [CO-04]
+business_risk: >
+  Restricted data copied to removable media leaves every technical control and can be
+  lost, stolen or taken by a departing employee.
+user_scenario: >
+  A relationship manager copies a folder of client portfolio reports to a personal USB key
+  before a client visit.
+jurisdiction: [CH, LU]
+segments: [all]
+data_categories: [DC-01, DC-02, DC-10, DC-11, DC-14]
+channel: Endpoint, copy to removable USB device
+target_population: All staff; approved device group (bank-issued encrypted USB) for named roles
+prerequisites:
+  - Devices onboarded to Endpoint DLP
+  - Removable storage device group defined by vendor ID/product ID or serial number for bank-issued encrypted keys
+  - Device control policy (USB allowed or blocked at OS level) aligned, owned by endpoint team
+detection:
+  conditions:
+    - File labelled L3 or L4, or content matches L3 detection rules (5+ IBANs, client ID with context, KYC fingerprint)
+    - Activity is copy to removable storage
+  thresholds:
+    block: 1 matching file
+  confidence: High for labelled files; Medium for content-only matches
+actions:
+  - condition: Non-approved device
+    action: Block
+  - condition: Approved encrypted device group
+    action: Audit, no block
+notification:
+  user: Endpoint toast notification with guideline link
+  admin: Alert on block; daily aggregate for audit events
+severity: High
+exceptions:
+  - Approved device group (named users, time-bound)
+owner: CISO
+expected_evidence:
+  - Endpoint DLP settings (device groups) sanitised export
+  - Activity Explorer event "copy to removable media" with policy match
+  - Endpoint notification screenshot (redacted)
+tests:
+  positive: L3 docx from SCN-001 copied to virtual USB (expect block)
+  negative: SCN-004 negative file copied (expect allow, no event)
+  boundary: SCN-002 (4 IBANs, unlabelled) copied (expect allow + audit)
+  exception: Same positive file to approved device group (expect audit only)
+acceptance_criteria:
+  - Block observed on unapproved device within the documented sync window
+  - Approved device group behaves as audit only
+  - No block on negative file

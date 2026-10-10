@@ -1,0 +1,30 @@
+policy_id: PV-POL-XXX
+name: ""
+status: designed            # designed | lab-tested | retired
+lab_tested: false
+use_cases: []
+control_objectives: []
+intent: ""
+protected_data: []
+locations: {}               # exchange, sharepoint, onedrive, teams, endpoint
+scope:
+  include: ""
+  exclude: []
+rules:
+  - rule_id: PV-POL-XXX-R1
+    name: ""
+    conditions: {}
+    actions: []
+    user_notification: ""
+    alert: false
+    severity: ""
+exceptions: []
+deployment:
+  current_stage: S0
+  mode: TestWithoutNotifications
+test_protocol: []
+promotion_criteria: ""
+owner: ""
+review_frequency: ""
+license_dependency: ""
+known_limits: []

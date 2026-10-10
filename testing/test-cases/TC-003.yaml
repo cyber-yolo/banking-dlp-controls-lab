@@ -1,0 +1,23 @@
+test_id: TC-003
+type: boundary
+use_case_id: UC-001
+policy: PV-POL-001
+platform: Microsoft Purview
+preconditions:
+  - Same as TC-001, thresholds BlockThreshold=5 and StrictThreshold=20
+test_data:
+  - {id: TC-003a, scenario: SCN-002, file: SCN-002_UC-001_boundary-below.docx, occurrences: {iban: 4}}
+  - {id: TC-003b, scenario: SCN-003, file: SCN-003_UC-001_boundary-at.docx, occurrences: {iban: 5}}
+  - {id: TC-003c, scenario: SCN-011, file: SCN-011_UC-001_boundary-above.docx, occurrences: {iban: 20}}
+steps:
+  - Send each file separately to the external test mailbox.
+expected:
+  TC-003a: Rule R1 (notify), severity Low, no alert
+  TC-003b: Rule R2 (block with justification), severity Medium, alert
+  TC-003c: Rule R3 (strict block), severity High, alert
+failure_analysis_hint: >
+  If TC-003b matches R1, check whether the detector counts unique values or occurrences,
+  and whether minCount is inclusive in the tested version. Document the finding either way.
+actual: ""
+status: NOT RUN
+evidence: []

@@ -1,0 +1,29 @@
+id,title,description,labels,priority,milestone,depends_on,acceptance_criteria
+1,Repository baseline,README; LICENSE; SECURITY; CONTRIBUTING; CHANGELOG; .gitignore; disclaimer,type/docs;security;platform/agnostic,P1,v0.1,,Files present; disclaimer visible on README first screen
+2,CI pipeline and repository protection,Lint (YAML; JSON; Markdown); unit tests; repo validator; gitleaks; ruleset on main; secret scanning and push protection enabled,type/automation;security,P1,v0.1,1,CI green on main; ruleset blocks direct push; screenshot of settings (redacted)
+3,Banking data taxonomy,Five levels L0 to L4 with handling rules and aggregation rules,type/governance;platform/agnostic,P1,v0.1,1,taxonomy.yaml validated; aggregation rules explicit
+4,Data catalog,21 banking data categories with owners; channels; controls; detection methods per platform,type/governance;platform/agnostic,P1,v0.1,3,All columns filled; every category mapped to a level
+5,Architecture and control objectives,Layer model; CO-01 to CO-08; traceability chain,type/docs;platform/agnostic,P1,v0.1,3,Mermaid renders on GitHub; each CO referenced by at least one UC
+6,Use case catalog,UC-001 to UC-015 with channel; data; threshold; action; owner,type/use-case;platform/agnostic,P1,v0.2,4;5,15 rows; every UC linked to CO and policy ID
+7,Detailed use case sheets (priority set),UC-001; UC-003; UC-004; UC-010 with tests and acceptance criteria,type/use-case;platform/agnostic,P1,v0.2,6,Each sheet has positive; negative; boundary tests
+8,PV-POL-001 specification,Tiered external email policy for CH/LU IBAN,type/policy;platform/purview,P1,v0.2,7,Spec reviewed; tests TC-001 to TC-003 defined
+9,Remaining use case sheets,Detailed sheets for the other 11 use cases,type/use-case;platform/agnostic,P2,v0.2,6,11 sheets following template
+10,Lab tenant setup,Tenant; users; external mailbox; SharePoint site; Teams; roles separation; redacted documentation,type/docs;platform/purview;needs-lab,P1,v0.3,,03-lab-setup.md completed without identifiers
+11,Import and test custom SIT rule package,Import rule pack; test with generator files; record confidence levels,type/policy;platform/purview;needs-lab,P1,v0.3,10,Client ID matches at 85 with context and 65 without; evidence stored
+12,Sensitivity labels L0 to L4,Create labels mapped to taxonomy; publish to test users,type/policy;platform/purview;needs-lab,P1,v0.3,10,Labels visible in Office apps; label names match taxonomy
+13,Deploy PV-POL-001 and PV-POL-003 in simulation,Use New-LabDlpPolicy.ps1 and portal; export configuration,type/policy;platform/purview;needs-lab,P1,v0.3,8;11,Policies in S1; configuration export hashed
+14,Endpoint DLP onboarding and settings,Onboard Windows 11 VM; device groups; printer groups; service domain groups,type/policy;platform/purview;needs-lab,P1,v0.4,10,Device healthy in portal; settings documented
+15,PV-POL-002 endpoint egress tests,USB; print; browser upload; approved group exception,type/test;platform/purview;needs-lab,P1,v0.4,14,TC-004 to TC-007 executed with evidence
+16,Alerting and first triage run,Configure alerts; triage lab alerts with playbook codes,type/governance;platform/purview;needs-lab,P1,v0.4,13;15,At least 10 alerts qualified with codes; timings recorded
+17,Generator hardening,Grouped IBAN format scenario; HR scenario; transactions scenario; docs,type/automation;type/test,P1,v0.5,,New scenarios with tests; determinism test still passes
+18,Execute TC-001 to TC-003 and TC-010 to TC-012,Email tests incl. boundary; false positive; false negative,type/test;platform/purview;needs-lab,P1,v0.5,13;17,Matrix rows filled with status and evidence reference
+19,EDM on synthetic customer master,Schema; hashed upload; UC-012 test,type/policy;platform/purview;needs-lab,P2,v0.5,11,EDM match evidenced on synthetic CID file
+20,Exception register reconciliation,Script comparing register with configuration export,type/governance;type/automation,P2,v0.6,13,Mismatch report produced for 2 synthetic exceptions
+21,KPI computation from lab exports,Compute KPI-01 to KPI-05 from lab events,type/governance;type/automation;needs-lab,P2,v0.6,16,5 KPIs computed; limits stated
+22,Tuning cycle with before/after,One documented tuning change with FP rate before and after,type/policy;type/test;needs-lab,P2,v0.6,18,PR shows metric delta and regression PASS
+23,Verify EU references,DORA; GDPR; NIS2; EBA rows checked against official texts,type/regulatory,P2,v0.7,,No EU row left TO VERIFY; URLs and dates filled
+24,Verify CH and LU references,nLPD; LB; FINMA; LSF; CSSF; AML laws; labour law,type/regulatory,P2,v0.7,,No CH/LU row left TO VERIFY
+25,Regression runner,Replay manifest-linked tests and diff with previous run,type/automation;type/test,P2,v0.8,18,Diff report generated from two runs
+26,Configuration drift check,Compare two sanitised exports and report changes,type/automation;platform/purview,P2,v0.8,13,Drift report lists added; removed; changed rules
+27,Symantec DLP design extension,SY-POL-002 to SY-POL-005; matrix completed with limits,type/policy;platform/symantec,P2,v0.9,6,4 designs; every matrix row has coverage and test status
+28,Release v1.0,Refresh README; limits; walkthrough GIF; release notes,type/docs,P1,v1.0,all,Every tested claim has evidence; release tagged

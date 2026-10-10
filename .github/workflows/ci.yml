@@ -1,0 +1,60 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: YAML lint
+        run: |
+          pip install yamllint
+          yamllint -c .yamllint.yml .
+      - name: JSON syntax
+        run: |
+          find . -name "*.json" -not -path "./synthetic-data-generator/output/*" -print0 \
+            | xargs -0 -r -n1 python -m json.tool > /dev/null
+      - name: Markdown lint
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "**/*.md"
+
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: synthetic-data-generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Unit tests
+        run: python -m pytest -q
+      - name: Generate and validate synthetic corpus (not committed)
+        run: |
+          python -m dlpgen generate --config config.example.yaml
+          python -m dlpgen validate-output --manifest output/manifest.json
+      - name: Repository data validator
+        run: python -m dlpgen validate-repo --root ..
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

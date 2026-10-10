@@ -1,0 +1,52 @@
+uc_id: UC-010
+title: AML suspicion information shared outside compliance (tipping-off)
+status: draft
+control_objectives: [CO-06]
+business_risk: >
+  Information that a suspicion report has been or may be filed reaches the client or an
+  unauthorised person. AML laws in Luxembourg and Switzerland prohibit such disclosure;
+  it can also compromise an investigation.
+user_scenario: >
+  An investigator forwards an internal alert review, including the client ID and the draft
+  suspicion report, to the relationship manager's external address, or the RM forwards it to the client.
+jurisdiction: [CH, LU]
+segments: [all]
+data_categories: [DC-03, DC-01]
+channel: Exchange (external and internal outside compliance group), Teams, print
+target_population: All staff; compliance and MLRO team treated as authorised internal perimeter
+prerequisites:
+  - AML vocabulary dictionary (EN, FR, DE) validated by the MLRO
+  - Compliance group membership maintained
+  - Label L4 applied by default in the AML case management library
+detection:
+  conditions:
+    - AML vocabulary (suspicion report, declaration de soupcon, CRF, MROS, STR/SAR) within proximity of a client identifier
+    - Or L4 AML label
+    - Recipient external, or internal outside the compliance group
+  thresholds:
+    block: 1 occurrence
+  confidence: Medium (keyword-based), High with label
+actions:
+  - condition: External recipient
+    action: Strict block, no override
+  - condition: Internal recipient outside compliance
+    action: Block with justification, alert to MLRO delegate
+notification:
+  user: Neutral message that does not reveal the reason in detail (the recipient may be the client)
+  admin: Critical alert, restricted incident visibility (MLRO delegates only)
+severity: Critical
+exceptions:
+  - Filing to the FIU is done through the official reporting portal, not email; no DLP exception needed
+owner: MLRO
+expected_evidence:
+  - Dictionary version and approval record
+  - Block events with restricted-access incident
+  - Proof that DLP analysts outside compliance cannot see incident content (role configuration)
+tests:
+  positive: SCN-010 AML memo with client ID to external recipient (expect strict block)
+  negative: Generic AML training material without client identifier (expect no match)
+  context: AML vocabulary without client ID (expect no match or low severity)
+acceptance_criteria:
+  - No override possible on external channel
+  - Incident visible only to authorised roles
+  - Dictionary false positives on AML training material reviewed and documented

@@ -1,0 +1,199 @@
+# dlpgen scenario configuration. All data produced is synthetic.
+seed: 20260930
+output_dir: output
+document_timestamp: "2026-01-01T00:00:00Z"
+default_formats: [txt, csv, docx, xlsx, pdf]
+
+scenarios:
+  - id: SCN-001
+    use_case_id: UC-001
+    test_type: positive
+    description: 10 LU IBANs with client context, external email
+    jurisdiction: LU
+    data:
+      - {category: iban, count: 10}
+    context_keywords: true
+    classification: L3
+    target_channel: exchange-external
+    expected_policy: PV-POL-001-R2
+    expected_action: block_with_justification
+    expected_alert: true
+    expected_result: Blocked, override with justification offered, Medium alert
+    formats: [txt, csv, json, docx, xlsx, pdf, png, zip]
+    format_overrides:
+      png:
+        expected_action: none
+        expected_alert: false
+        expected_result: No match expected unless OCR for images is enabled (known limit)
+
+  - id: SCN-002
+    use_case_id: UC-001
+    test_type: boundary-below
+    jurisdiction: CH
+    data:
+      - {category: iban, count: 4}
+    classification: L2
+    target_channel: exchange-external
+    expected_policy: PV-POL-001-R1
+    expected_action: notify
+    expected_alert: false
+    expected_result: Delivered, policy tip shown, no alert
+
+  - id: SCN-003
+    use_case_id: UC-001
+    test_type: boundary-at
+    jurisdiction: CH
+    data:
+      - {category: iban, count: 5}
+    classification: L3
+    target_channel: exchange-external
+    expected_policy: PV-POL-001-R2
+    expected_action: block_with_justification
+    expected_alert: true
+    expected_result: Blocked, override with justification offered, Medium alert
+
+  - id: SCN-004
+    use_case_id: UC-001
+    test_type: negative
+    jurisdiction: LU
+    data:
+      - {category: negative}
+    context_keywords: false
+    classification: L1
+    target_channel: exchange-external
+    expected_policy: none
+    expected_action: none
+    expected_alert: false
+    expected_result: Delivered, no policy match
+    formats: [txt, csv, json, docx, xlsx, pdf, png, zip]
+
+  - id: SCN-005
+    use_case_id: UC-001
+    test_type: false-positive
+    description: IBAN-like strings with wrong check digits
+    jurisdiction: LU
+    data:
+      - {category: iban_invalid, count: 10}
+    classification: L1
+    target_channel: exchange-external
+    expected_policy: none
+    expected_action: none
+    expected_alert: false
+    expected_result: No IBAN match (checksum validation)
+
+  - id: SCN-006
+    use_case_id: UC-004
+    test_type: context-without
+    description: Client IDs without client keywords (custom SIT low confidence only)
+    jurisdiction: LU
+    data:
+      - {category: client_id, count: 3}
+    context_keywords: false
+    classification: L2
+    target_channel: endpoint-browser-genai
+    expected_policy: PV-POL-003-R3
+    expected_action: audit
+    expected_alert: false
+    expected_result: No high-confidence client ID match; audit only
+
+  - id: SCN-007
+    use_case_id: UC-004
+    test_type: context-with
+    description: Same client ID pattern with client keywords
+    jurisdiction: LU
+    data:
+      - {category: client_id, count: 3}
+    context_keywords: true
+    classification: L3
+    target_channel: endpoint-browser-genai
+    expected_policy: PV-POL-003-R2
+    expected_action: block_with_justification
+    expected_alert: false
+    expected_result: Blocked with justification (client ID high confidence)
+
+  - id: SCN-008
+    use_case_id: UC-014
+    test_type: positive
+    description: Non-functional example credentials
+    jurisdiction: LU
+    data:
+      - {category: secrets}
+    classification: L4
+    target_channel: endpoint-browser-genai
+    expected_policy: PV-POL-003-R1
+    expected_action: block
+    expected_alert: true
+    expected_result: Strict block, High alert
+    formats: [txt, docx]
+
+  - id: SCN-009
+    use_case_id: UC-004
+    test_type: multi-data
+    description: KYC dossier with account data
+    jurisdiction: CH
+    data:
+      - {category: kyc, count: 3}
+      - {category: iban, count: 2}
+    classification: L3
+    target_channel: endpoint-browser-genai
+    expected_policy: PV-POL-003-R2
+    expected_action: block_with_justification
+    expected_alert: false
+    expected_result: Blocked with justification
+
+  - id: SCN-010
+    use_case_id: UC-010
+    test_type: positive
+    description: AML investigation memo with client IDs (tipping-off)
+    jurisdiction: LU
+    data:
+      - {category: aml, count: 2}
+    classification: L4
+    target_channel: exchange-external
+    expected_policy: PV-POL-006
+    expected_action: block
+    expected_alert: true
+    expected_result: Strict block, Critical alert, restricted incident visibility
+
+  - id: SCN-011
+    use_case_id: UC-001
+    test_type: boundary-above
+    jurisdiction: LU
+    data:
+      - {category: iban, count: 20}
+    classification: L3
+    target_channel: exchange-external
+    expected_policy: PV-POL-001-R3
+    expected_action: block
+    expected_alert: true
+    expected_result: Strict block, High alert
+
+  - id: SCN-012
+    use_case_id: UC-006
+    test_type: positive
+    description: Documented test card numbers in a chat-like note
+    jurisdiction: LU
+    data:
+      - {category: card_pan, count: 3}
+    classification: L3
+    target_channel: teams-external
+    expected_policy: PV-POL-005
+    expected_action: block
+    expected_alert: true
+    expected_result: Message blocked for external participants
+    formats: [txt, docx]
+
+  - id: SCN-013
+    use_case_id: UC-007
+    test_type: positive
+    description: Private banking portfolio statement for print test
+    jurisdiction: CH
+    data:
+      - {category: portfolio, count: 6}
+    classification: L3
+    target_channel: endpoint-print
+    expected_policy: PV-POL-002
+    expected_action: block_with_justification
+    expected_alert: true
+    expected_result: Print blocked on non-approved printer, override with justification
+    formats: [docx, pdf]

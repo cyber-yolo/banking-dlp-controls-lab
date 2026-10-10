@@ -1,0 +1,38 @@
+policy_id: SY-POL-001
+name: "SY-POL-001 External email - bank account data"
+status: design-only
+lab_tested: false
+translates: PV-POL-001
+use_cases: [UC-001]
+target_version_assumption: "16.x"
+components: [Enforce Server, Network Prevent for Email]
+detection_rules:
+  - rule: IBAN count low
+    method: Data Identifier (IBAN, regional variant covering CH and LU, to confirm)
+    validators: checksum
+    match_count: "1-4"
+    severity: Low
+  - rule: IBAN count medium
+    method: Data Identifier (IBAN)
+    match_count: "5-19"
+    severity: Medium
+  - rule: IBAN count high
+    method: Data Identifier (IBAN)
+    match_count: ">=20"
+    severity: High
+exceptions:
+  - type: recipient
+    condition: Recipient domain matches approved correspondent list (maintained from exception register)
+response_rules:
+  - severity: Low
+    actions: [Notify sender (email notification)]
+  - severity: Medium
+    actions: [Block SMTP message, Notify sender with justification process]
+  - severity: High
+    actions: [Block SMTP message, Notify sender]
+design_notes:
+  - Justification at send time is not native on the email network path in the same way as Purview policy tips; the design uses block plus a documented release process. To confirm per version.
+  - Severity-based response rules keep one policy with tiered actions.
+test_protocol: [TC-001, TC-002, TC-003]
+known_gaps:
+  - No lab: detection and response not verified.

@@ -1,0 +1,29 @@
+uc_id: UC-XXX
+title: ""
+status: draft
+control_objectives: []
+business_risk: ""
+user_scenario: ""
+jurisdiction: []            # CH, LU
+segments: []                # retail, private banking, corporate, asset management, depositary
+data_categories: []         # DC-xx
+channel: ""
+target_population: ""
+prerequisites: []
+detection:
+  conditions: []
+  thresholds: {}
+  confidence: ""
+actions: []
+notification:
+  user: ""
+  admin: ""
+severity: ""
+exceptions: []
+owner: ""
+expected_evidence: []
+tests:
+  positive: ""
+  negative: ""
+  boundary: ""
+acceptance_criteria: []

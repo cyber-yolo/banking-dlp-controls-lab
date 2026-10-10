@@ -1,0 +1,34 @@
+# Assumptions and limits
+
+| ID | Assumption | Consequence if wrong |
+|---|---|---|
+| A-01 | A personal Microsoft 365 lab tenant with E5 or E5 Compliance capabilities is available (trial or sandbox) | Endpoint DLP, Teams DLP and EDM tests move to "design only" |
+| A-02 | One or two Windows 11 VMs can be onboarded to Endpoint DLP | Endpoint use cases (UC-003, UC-007, UC-008) remain untested |
+| A-03 | No Symantec DLP licence or lab is available; target version assumed 16.x (Broadcom) | Phase 2 is a documented design, labelled "not tested" |
+| A-04 | An external mailbox outside the lab tenant is available as test recipient | External email tests cannot be executed |
+| A-05 | Repository language is English; French summaries may be added | None |
+
+## What this repository does not prove
+
+- Performance at production scale (volumes, latency, endpoint impact).
+- Behaviour on a real bank's data, where false positive profiles are very different.
+- Integration with a real SOC, ticketing or case management tool.
+
+## Publication boundaries
+
+| Content | Public repo | Lab tenant only | Never exported from a real environment |
+|---|---|---|---|
+| Policy intent, conditions, thresholds (spec) | Yes | | |
+| Custom SIT regex and keywords (synthetic formats) | Yes | | |
+| PowerShell scripts without identifiers | Yes | | |
+| Policy exports from the lab | Sanitised extracts only | Full export | |
+| Activity Explorer and alert screenshots | Redacted | Raw | |
+| EDM schema (synthetic) | Yes | Hashed upload | |
+| Any configuration, export, screenshot, alert or content from an employer or client | | | **Always excluded** |
+
+## Known technical limits
+
+- Purview and Symantec IBAN detection validate the ISO 7064 mod 97 checksum. Positive tests therefore use checksum-valid synthetic IBANs (see `synthetic-data-generator/README.md`). Invalid checksums are used only for false-positive tests.
+- No official test range exists for IBANs. Synthetic IBANs use a zero bank code and the literal `SYNTH` in the account part to make collision with a real account practically impossible; residual risk is documented, not eliminated.
+- Swiss AHV/AVS numbers and Luxembourg national identification numbers are **not generated** in v0.x: any checksum-valid value could belong to a real person. Detection of these types is documented but not tested.
+- Purview policy distribution and endpoint sync introduce delays; tests record timestamps and allow for propagation before concluding.

@@ -1,0 +1,17 @@
+# Consumed by automation/bootstrap_github.py
+- {name: "type/use-case", color: "1d76db", description: "Use case definition or change"}
+- {name: "type/policy", color: "0e8a16", description: "Vendor policy specification or config"}
+- {name: "type/test", color: "fbca04", description: "Test case, test data or test run"}
+- {name: "type/governance", color: "5319e7", description: "Lifecycle, RACI, exceptions, KPI/KRI"}
+- {name: "type/regulatory", color: "b60205", description: "Regulatory mapping"}
+- {name: "type/automation", color: "006b75", description: "Scripts, CI, generator"}
+- {name: "type/docs", color: "c5def5", description: "Documentation"}
+- {name: "platform/agnostic", color: "bfdadc", description: "Vendor-independent layer"}
+- {name: "platform/purview", color: "0052cc", description: "Microsoft Purview"}
+- {name: "platform/symantec", color: "d93f0b", description: "Symantec DLP"}
+- {name: "priority/P1", color: "b60205", description: "Blocking for the milestone"}
+- {name: "priority/P2", color: "d93f0b", description: "Important"}
+- {name: "priority/P3", color: "fef2c0", description: "Nice to have"}
+- {name: "needs-lab", color: "e99695", description: "Requires a lab tenant or device"}
+- {name: "security", color: "000000", description: "Repository security"}
+- {name: "dependencies", color: "ededed", description: "Dependency updates"}

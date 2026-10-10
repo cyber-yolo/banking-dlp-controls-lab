@@ -1,0 +1,48 @@
+policy_id: PV-POL-003
+name: "PV-POL-003 Generative AI - client and secret data"
+status: designed
+lab_tested: false
+use_cases: [UC-004]
+control_objectives: [CO-05]
+intent: >
+  Prevent client, KYC, AML and credential data from being pasted or uploaded to non-sanctioned
+  generative AI services, while keeping the sanctioned enterprise assistant usable.
+protected_data: [DC-01, DC-02, DC-03, DC-19, DC-21]
+locations:
+  endpoint: All onboarded devices
+  service_domain_group: Non-sanctioned GenAI
+scope:
+  include: All users
+  exclude: []
+rules:
+  - rule_id: PV-POL-003-R1
+    name: L4 and credentials strict block
+    detection_any_of: [label L4, credential SITs, Custom - AML vocabulary with client ID]
+    activities: [paste_to_browser, upload_to_cloud_domain]
+    action: block
+    severity: High
+  - rule_id: PV-POL-003-R2
+    name: L3 block with justification
+    detection_any_of: [label L3, Custom - Client ID (CLT) high confidence, fingerprint Synthetic KYC form v1]
+    activities: [paste_to_browser, upload_to_cloud_domain]
+    action: block_with_override
+    severity: Medium
+  - rule_id: PV-POL-003-R3
+    name: Visibility
+    detection_any_of: [any SIT match]
+    activities: [paste_to_browser, upload_to_cloud_domain]
+    action: audit
+    severity: Low
+complementary_controls:
+  - Purview Data Security Posture Management for AI reports (evaluate availability in lab)
+  - Web filtering or CASB for unsanctioned AI domains (out of repository scope)
+deployment:
+  current_stage: S0
+  mode: TestWithoutNotifications
+test_protocol: [TC-008, TC-009]
+owner: CISO + DPO
+review_frequency: Monthly during the first 6 months (fast-moving domain list)
+license_dependency: Endpoint DLP; supported browser
+known_limits:
+  - New AI domains appear constantly; the domain group is a maintained list, not a guarantee.
+  - Mobile and unmanaged devices are not covered by this policy.

@@ -1,0 +1,36 @@
+# Generated synthetic corpus (rebuild with dlpgen, never commit)
+synthetic-data-generator/output/
+output/
+
+# Lab evidence and exports (may contain tenant identifiers)
+evidence/
+lab-exports/
+*.evidence.zip
+
+# Credentials and local config
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+*credentials*
+*secret*.json
+local.settings.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

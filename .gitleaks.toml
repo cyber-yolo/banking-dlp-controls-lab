@@ -1,0 +1,15 @@
+title = "banking-dlp-controls-lab gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented, publicly known synthetic test values used by the generator"
+regexes = [
+  '''AKIAIOSFODNN7EXAMPLE''',
+  '''wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY''',
+  '''NOT-A-REAL-SECRET''',
+]
+paths = [
+  '''synthetic-data-generator/dlpgen/values\.py''',
+]

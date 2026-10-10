@@ -1,0 +1,38 @@
+# Banking data classification taxonomy (vendor-agnostic)
+version: 0.1.0
+status: draft
+levels:
+  - id: L0
+    name: Public
+    description: Approved for public release (published rates, marketing, annual report once published).
+    purview_label: Public
+    handling: No restriction.
+  - id: L1
+    name: Internal
+    description: Default for business information without client, employee or security sensitivity.
+    purview_label: General
+    handling: Internal sharing; external sharing allowed with business need.
+  - id: L2
+    name: Confidential
+    description: Single-client or limited personal data, contracts, internal procedures with security relevance.
+    purview_label: Confidential
+    handling: Need-to-know; external transfer only to identified counterparties; DLP notify or audit.
+  - id: L3
+    name: Restricted
+    description: Bulk client data, KYC dossiers, payment and transaction data, HR and compensation, credit files, audit reports.
+    purview_label: Highly Confidential - Restricted
+    handling: Named groups; external transfer only via approved channels; DLP block with justification.
+  - id: L4
+    name: Highly Restricted
+    description: Swiss client identifying data (CID) subject to banking secrecy, AML suspicion reports and investigations, authentication secrets and keys.
+    purview_label: Highly Confidential - Secret
+    handling: Named individuals; no external transfer outside documented processes; DLP strict block, high-severity alert.
+aggregation_rules:
+  - rule: A category classified L2 for a single record is raised to L3 when 5 or more records appear together, or when combined with identity data.
+  - rule: Any document combining a client identifier with an AML alert or suspicion report is L4.
+  - rule: Classification is set by the business owner; DLP detection can suggest but never downgrade a label.
+criticality_scale:
+  - {id: C1, name: Low}
+  - {id: C2, name: Moderate}
+  - {id: C3, name: High}
+  - {id: C4, name: Critical}

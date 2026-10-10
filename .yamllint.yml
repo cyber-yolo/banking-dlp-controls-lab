@@ -1,0 +1,11 @@
+extends: default
+ignore: |
+  synthetic-data-generator/output/
+  .venv/
+rules:
+  line-length: disable
+  document-start: disable
+  truthy:
+    allowed-values: ["true", "false", "on"]
+  comments:
+    min-spaces-from-content: 1
