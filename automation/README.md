@@ -12,4 +12,4 @@ python automation/bootstrap_github.py --repo <owner>/<repo>          # review th
 python automation/bootstrap_github.py --repo <owner>/<repo> --apply
 ```
 
-Planned (backlog): regression runner (#25), configuration drift check (#26), exception reconciliation (#20), KPI computation (#21).
+Planned (backlog): regression runner (#29), configuration drift check (#30), exception reconciliation (#24), KPI computation (#25).
