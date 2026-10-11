@@ -49,7 +49,7 @@ jobs:
       - name: Repository data validator
         run: python -m dlpgen validate-repo --root ..
 
-    secrets:
+  secrets:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
