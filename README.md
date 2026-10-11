@@ -39,6 +39,10 @@ Every artefact carries an explicit status. Nothing is claimed as tested until ev
 
 ## Quick start (synthetic data generator)
 
+Requires Python 3.10 or later (3.12 matches CI).
+
+### Linux / macOS
+
 ```bash
 cd synthetic-data-generator
 python -m venv .venv && source .venv/bin/activate
@@ -47,6 +51,20 @@ python -m dlpgen generate --config config.example.yaml
 python -m dlpgen validate-output --manifest output/manifest.json
 python -m pytest -q
 ```
+
+### Windows (PowerShell)
+
+```powershell
+cd synthetic-data-generator
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python -m dlpgen generate --config config.example.yaml
+python -m dlpgen validate-output --manifest output/manifest.json
+python -m pytest -q
+```
+
+If PowerShell blocks the activation script, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first, then activate again.
 
 Generated files land in `synthetic-data-generator/output/`, which is git-ignored. Only configuration, seeds and code are versioned: the corpus is rebuilt on demand.
 
