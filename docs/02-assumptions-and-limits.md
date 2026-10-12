@@ -7,6 +7,7 @@
 | A-03 | No Symantec DLP licence or lab is available; target version assumed 16.x (Broadcom) | Phase 2 is a documented design, labelled "not tested" |
 | A-04 | An external mailbox outside the lab tenant is available as test recipient | External email tests cannot be executed |
 | A-05 | Repository language is English; French summaries may be added | None |
+| A-06 | The lab tenant trial stays active for the full duration of v0.3 (1 month from 11 October 2026; cancel before 10 November 2026) | If the trial ends before evidence is collected, the tenant and its evidence are lost. Re-run on a new tenant and document the gap |
 
 ## What this repository does not prove
 
@@ -32,3 +33,10 @@
 - No official test range exists for IBANs. Synthetic IBANs use a zero bank code and the literal `SYNTH` in the account part to make collision with a real account practically impossible; residual risk is documented, not eliminated.
 - Swiss AHV/AVS numbers and Luxembourg national identification numbers are **not generated** in v0.x: any checksum-valid value could belong to a real person. Detection of these types is documented but not tested.
 - Purview policy distribution and endpoint sync introduce delays; tests record timestamps and allow for propagation before concluding.
+- Audit search cmdlets and the portal search need the admin account in *Organization Management* in this setup. Audit events take 60 to 90 minutes to appear after activity. See `lab-troubleshooting/purview-audit.md`.
+
+## Open gaps
+
+| ID | Gap | Status | Impact |
+|---|---|---|---|
+| GAP-03 | Audit search returned `BadRequest` on the lab tenant (11 to 12 October 2026) | Partly resolved on 12 October 2026: cmdlet search works after adding the admin account to Organization Management. Cause not fully isolated. | Still open: Exchange and SharePoint events not yet confirmed in audit search; Activity Explorer not yet tested. Evidence for TC-001 to TC-003 depends on this. |

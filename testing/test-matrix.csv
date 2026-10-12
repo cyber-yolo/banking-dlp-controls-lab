@@ -1,7 +1,7 @@
 test_id,use_case_id,platform,version_or_context,channel,file_id,sha256_ref,data_type,confidence,threshold,expected_action,actual_result,status,comments,evidence_ref
-TC-001,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-001-DOCX,manifest,IBAN LU x10,High,5-19,block_with_justification,,NOT RUN,,
-TC-002,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-004-DOCX,manifest,None,n/a,n/a,none,,NOT RUN,,
-TC-003a,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-002-DOCX,manifest,IBAN CH x4,High,1-4,notify,,NOT RUN,,
+TC-001,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-001-DOCX,manifest,IBAN LU x10,High,5-19,block_with_justification,,NOT RUN,Blocked by GAP-03 until 12 Oct 2026 (audit search now returns results); Exchange and Activity Explorer evidence pending; status unchanged,
+TC-002,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-004-DOCX,manifest,None,n/a,n/a,none,,NOT RUN,Blocked by GAP-03 until 12 Oct 2026 (audit search now returns results); Exchange and Activity Explorer evidence pending; status unchanged,
+TC-003a,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-002-DOCX,manifest,IBAN CH x4,High,1-4,notify,,NOT RUN,Blocked by GAP-03 until 12 Oct 2026 (audit search now returns results); Exchange and Activity Explorer evidence pending; status unchanged,
 TC-003b,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-003-DOCX,manifest,IBAN CH x5,High,5-19,block_with_justification,,NOT RUN,,
 TC-003c,UC-001,Purview,Lab tenant (S1 simulation),Exchange external,SCN-011-DOCX,manifest,IBAN LU x20,High,20+,block,,NOT RUN,,
 TC-004,UC-003,Purview,Lab tenant + Windows 11 VM,Endpoint USB,SCN-001-DOCX,manifest,IBAN LU x10,High,5+,block,,NOT RUN,,
