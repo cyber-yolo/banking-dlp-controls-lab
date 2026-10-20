@@ -1,0 +1,174 @@
+﻿{
+    "Mode":  "TestWithoutNotifications",
+    "DisplayName":  "PV-POL-001 External email - bank account data",
+    "Type":  "Dlp",
+    "ExchangeLocation":  [
+                             "All"
+                         ],
+    "SharePointLocation":  [
+
+                           ],
+    "SharePointLocationException":  [
+
+                                    ],
+    "OneDriveLocation":  [
+
+                         ],
+    "OneDriveLocationException":  [
+
+                                  ],
+    "ExchangeOnPremisesLocation":  [
+
+                                   ],
+    "SharePointOnPremisesLocation":  [
+
+                                     ],
+    "SharePointOnPremisesLocationException":  [
+
+                                              ],
+    "TeamsLocation":  [
+
+                      ],
+    "TeamsLocationException":  [
+
+                               ],
+    "EndpointDlpLocation":  [
+
+                            ],
+    "EndpointDlpLocationException":  [
+
+                                     ],
+    "ThirdPartyAppDlpLocation":  [
+
+                                 ],
+    "ThirdPartyAppDlpLocationException":  [
+
+                                          ],
+    "OnPremisesScannerDlpLocation":  [
+
+                                     ],
+    "OnPremisesScannerDlpLocationException":  [
+
+                                              ],
+    "PowerBIDlpLocation":  [
+
+                           ],
+    "PowerBIDlpLocationException":  [
+
+                                    ],
+    "Locations":  "[]",
+    "LocationInclusions":  [
+
+                           ],
+    "LocationExclusions":  [
+
+                           ],
+    "EndpointDlpExtendedLocations":  "",
+    "ExchangeSender":  [
+
+                       ],
+    "ExchangeSenderException":  [
+
+                                ],
+    "PolicyTemplateInfo":  null,
+    "PolicyCategory":  "Unknown",
+    "MatchedItemsCount":  null,
+    "TotalItemsCount":  null,
+    "TopNLocationStatistics":  null,
+    "WorkloadStatistics":  null,
+    "IsSimulationPolicy":  true,
+    "SimulationStatus":  null,
+    "AutoEnableAfter":  null,
+    "IsFromSmartInsights":  null,
+    "IsColdDataSimulationPolicy":  false,
+    "ExtendedProperties":  null,
+    "Summary":  false,
+    "EnforcementPlanes":  null,
+    "LogicalWorkload":  null,
+    "OneDriveSharedBy":  [
+
+                         ],
+    "ExceptIfOneDriveSharedBy":  [
+
+                                 ],
+    "OneDriveSharedByMemberOf":  [
+
+                                 ],
+    "ExceptIfOneDriveSharedByMemberOf":  [
+
+                                         ],
+    "ExchangeSenderMemberOf":  [
+
+                               ],
+    "ExchangeSenderMemberOfException":  [
+
+                                        ],
+    "ExchangeAdaptiveScopes":  [
+
+                               ],
+    "ExchangeAdaptiveScopesException":  [
+
+                                        ],
+    "SharePointAdaptiveScopes":  [
+
+                                 ],
+    "SharePointAdaptiveScopesException":  [
+
+                                          ],
+    "OneDriveAdaptiveScopes":  [
+
+                               ],
+    "OneDriveAdaptiveScopesException":  [
+
+                                        ],
+    "TeamsAdaptiveScopes":  [
+
+                            ],
+    "TeamsAdaptiveScopesException":  [
+
+                                     ],
+    "EndpointDlpAdaptiveScopes":  [
+
+                                  ],
+    "EndpointDlpAdaptiveScopesException":  [
+
+                                           ],
+    "ExpectedLocations":  0,
+    "CompletedLocations":  0,
+    "FailedLocations":  0,
+    "ItemStatistics":  null,
+    "RuleMatchBlob":  null,
+    "ErrorMetadata":  null,
+    "UserAdministrativeUnitMembershipMap":  null,
+    "ForceValidate":  false,
+    "PolicyRulesMetaData":  "{\"WhenRulesChangedUtc\":\"2026-10-14T22:13:27.6381476Z\"}",
+    "GlobalListType":  "None",
+    "PolicyConstraints":  "{\"AdministrativeUnit\":[]}",
+    "Workload":  "Exchange, SharePoint, OneDriveForBusiness",
+    "Priority":  3,
+    "ObjectVersion":  "00000000-0000-0000-0000-000000000000",
+    "ReadOnly":  false,
+    "ExternalIdentity":  "",
+    "Comment":  "banking-dlp-controls-lab | UC-001 | spec policies/PV-POL-001.yaml",
+    "Enabled":  true,
+    "DistributionStatus":  "Pending",
+    "DistributionSyncStatus":  "Success",
+    "DistributionResults":  null,
+    "LastStatusUpdateTime":  null,
+    "ModificationTimeUtc":  "\/Date(1792008807637)\/",
+    "CreationTimeUtc":  "\/Date(1792008479567)\/",
+    "PolicyRBACScopes":  [
+
+                         ],
+    "DirectoryObjectVersion":  0,
+    "Name":  "PV-POL-001 External email - bank account data",
+    "ObjectCategory":  null,
+    "ObjectClass":  [
+                        "msExchUnifiedPolicy"
+                    ],
+    "WhenChanged":  "\/Date(1792016007000)\/",
+    "WhenCreated":  "\/Date(1792015679000)\/",
+    "WhenChangedUTC":  "\/Date(1792016007000)\/",
+    "WhenCreatedUTC":  "\/Date(1792015679000)\/",
+    "OrganizationalUnitRoot":  "FFO.extest.microsoft.com/Microsoft Exchange Hosted Organizations/redacted.example"
+}
