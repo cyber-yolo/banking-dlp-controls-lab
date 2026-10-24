@@ -40,3 +40,23 @@
 | ID | Gap | Status | Impact |
 |---|---|---|---|
 | GAP-03 | Audit search returned `BadRequest` on the lab tenant (11 to 12 October 2026) | Partly resolved on 12 October 2026: cmdlet search works after adding the admin account to Organization Management. Cause not fully isolated. | Still open: Exchange and SharePoint events not yet confirmed in audit search; Activity Explorer not yet tested. Evidence for TC-001 to TC-003 depends on this. |
+
+### GAP-05: default sensitivity label applied to test messages and attachments
+
+- Status: open, accepted for v0.3.
+- Observed: `General\All Employees (unrestricted)` is applied automatically to every
+  test message (Exchange) and attachment (endpoint), without user action.
+- Impact: the label does not change the file bytes (SHA-256 verified on the received
+  copies for TC-002 and TC-003a). Label-based scenarios are not validated.
+- Decision: default labels kept for the v0.3 campaign (option A). Mapping of taxonomy
+  L3 and L4 to Highly Confidential labels is documented as a gap, not implemented.
+
+  ### GAP-05: default sensitivity label applied to test messages and attachments
+
+- Status: open, accepted for v0.3.
+- Observed: `General\All Employees (unrestricted)` is applied automatically to every
+  test message (Exchange) and attachment (endpoint), without user action.
+- Impact: the label does not change the file bytes (SHA-256 verified on the received
+  copies for TC-002 and TC-003a). Label-based scenarios are not validated.
+- Decision: default labels kept for the v0.3 campaign (option A). Mapping of taxonomy
+  L3 and L4 to Highly Confidential labels is documented as a gap, not implemented.
