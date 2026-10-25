@@ -2,10 +2,10 @@
 
 | ID | Assumption | Consequence if wrong |
 |---|---|---|
-| A-01 | A personal Microsoft 365 lab tenant with E5 or E5 Compliance capabilities is available (trial or sandbox) | Endpoint DLP, Teams DLP and EDM tests move to "design only" |
+| A-01 | A personal Microsoft 365 lab tenant with E5 or E5 Compliance capabilities is available (trial or sandbox) | Endpoint DLP, Teams DLP and EDM tests move to "design only". Trial tenant used for v0.3, disabled on 25 October 2026. |
 | A-02 | One or two Windows 11 VMs can be onboarded to Endpoint DLP | Endpoint use cases (UC-003, UC-007, UC-008) remain untested |
 | A-03 | No Symantec DLP licence or lab is available; target version assumed 16.x (Broadcom) | Phase 2 is a documented design, labelled "not tested" |
-| A-04 | An external mailbox outside the lab tenant is available as test recipient | External email tests cannot be executed |
+| A-04 | ~~An external mailbox outside the lab tenant is available as test recipient~~ | Invalidated on 15 October 2026: external delivery to a Gmail mailbox succeeded (see GAP-04). |
 | A-05 | Repository language is English; French summaries may be added | None |
 | A-06 | The lab tenant trial stays active for the full duration of v0.3 (1 month from 11 October 2026; cancel before 10 November 2026) | If the trial ends before evidence is collected, the tenant and its evidence are lost. Re-run on a new tenant and document the gap |
 
@@ -39,19 +39,10 @@
 
 | ID | Gap | Status | Impact |
 |---|---|---|---|
-| GAP-03 | Audit search returned `BadRequest` on the lab tenant (11 to 12 October 2026) | Partly resolved on 12 October 2026: cmdlet search works after adding the admin account to Organization Management. Cause not fully isolated. | Still open: Exchange and SharePoint events not yet confirmed in audit search; Activity Explorer not yet tested. Evidence for TC-001 to TC-003 depends on this. |
+| GAP-03 | Audit search returned `BadRequest` on the lab tenant (11 to 12 October 2026) | Resolved for the campaign: cmdlet search works after adding the admin account to Organization Management (12 October). Cause not fully isolated. | Closed on 24 October 2026: Exchange DLP events and Activity explorer events observed for TC-001, TC-002, TC-003a, TC-003b, TC-003c. Evidence limited to the trial period. |
+| GAP-04 | Outbound mail to external recipients rejected with `550 5.7.501` on the trial tenant | Rejections observed on 15 October 2026 (12:19 to 12:28 UTC). Resolved later that day without a confirmed cause. | Closed on 15 October 2026: external delivery observed (SMOKE-001) and confirmed by message trace for TC-002, TC-003a, TC-003c and TC-001. |
 
 ### GAP-05: default sensitivity label applied to test messages and attachments
-
-- Status: open, accepted for v0.3.
-- Observed: `General\All Employees (unrestricted)` is applied automatically to every
-  test message (Exchange) and attachment (endpoint), without user action.
-- Impact: the label does not change the file bytes (SHA-256 verified on the received
-  copies for TC-002 and TC-003a). Label-based scenarios are not validated.
-- Decision: default labels kept for the v0.3 campaign (option A). Mapping of taxonomy
-  L3 and L4 to Highly Confidential labels is documented as a gap, not implemented.
-
-  ### GAP-05: default sensitivity label applied to test messages and attachments
 
 - Status: open, accepted for v0.3.
 - Observed: `General\All Employees (unrestricted)` is applied automatically to every
