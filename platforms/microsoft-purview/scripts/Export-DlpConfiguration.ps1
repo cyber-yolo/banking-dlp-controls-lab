@@ -91,4 +91,4 @@ $manifest = Get-ChildItem -Path $outDir -Filter '*.json' | ForEach-Object {
 $manifest | ConvertTo-Json | Set-Content -Path (Join-Path $outDir 'manifest.json') -Encoding utf8
 
 Write-Output ("Exported {0} policies, {1} rules, {2} custom SITs to {3}" -f $policies.Count, $rules.Count, $customSits.Count, $outDir)
-Write-Output 'Review the files before committing any extract. Raw exports stay in evidence/ (git-ignored).'
+Write-Output 'Review the files before committing any extract. Raw exports stay in evidence/ (git-ignored). Copy only redacted extracts to evidence-public/.'

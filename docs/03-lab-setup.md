@@ -39,7 +39,7 @@ Scripts in `platforms/microsoft-purview/scripts/` default to simulation mode and
 
 ## Evidence handling
 
-1. Store raw evidence locally in `evidence/<TC-ID>/<timestamp>/` (git-ignored).
+1. Store raw evidence locally in `evidence/<TC-ID>/<timestamp>/` (git-ignored). Publish only redacted extracts in `evidence-public/`.
 2. Record the SHA-256 of each evidence file in the test matrix.
 3. Commit only redacted extracts: tenant name, domain, user principal names, device names and GUIDs removed.
 

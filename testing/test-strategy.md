@@ -22,7 +22,7 @@
 3. Execute the action on the target channel with the file listed in the test case. Record UTC timestamp.
 4. Allow for policy distribution and event ingestion before concluding. Record the wait time.
 5. Collect: user-side result (tip, block, notification), Activity Explorer event, alert (if expected).
-6. Store evidence in `evidence/<TC-ID>/<timestamp>/` with SHA-256; commit only redacted extracts.
+6. Store raw evidence in `evidence/<TC-ID>/<timestamp>/` (git-ignored) with SHA-256; commit only redacted extracts, in `evidence-public/`.
 7. Fill the test matrix row: actual result, status, evidence reference.
 
 ## Pass criteria

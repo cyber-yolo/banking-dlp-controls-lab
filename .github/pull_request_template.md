@@ -24,7 +24,7 @@ Closes #
 - [ ] No tenant ID, tenant domain, internal URL, client or employer name
 - [ ] No screenshot from any environment other than the redacted personal lab
 - [ ] No content describing how to bypass or disable a security control
-- [ ] Generated files are not committed (`output/`, `evidence/` ignored)
+- [ ] Generated files are not committed (`output/`, `evidence/` ignored). Only redacted extracts go in `evidence-public/`
 - [ ] Regulatory statements cite the text and are marked TO VERIFY if not checked against the official source
 - [ ] Untested items are labelled as such
 - [ ] `python -m dlpgen validate-repo --root ..` passes locally
