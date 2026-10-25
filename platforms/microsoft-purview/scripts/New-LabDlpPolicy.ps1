@@ -4,22 +4,26 @@
 
 .DESCRIPTION
     Implements platforms/microsoft-purview/policies/PV-POL-001.yaml as three rules:
-      R1  1 to (BlockThreshold-1) IBANs  -> audit + policy tip, severity Low
-      R2  BlockThreshold to (StrictThreshold-1) -> block with justification, alert, Medium
-      R3  StrictThreshold or more -> block, alert, High
+      R1  1 to (BlockThreshold-1) IBANs  -> audit + policy tip, severity Low, NO alert mail
+      R2  BlockThreshold to (StrictThreshold-1) -> block with justification, alert mail, Medium
+      R3  StrictThreshold or more -> block, alert mail, High
     Defaults to simulation mode (TestWithoutNotifications). Supports -WhatIf.
 
-    STATUS: syntax-checked, NOT lab-validated. Verify parameter behaviour (notably NotifyUser
-    semantics for Exchange) against current Security & Compliance PowerShell documentation.
+    Only R2 and R3 generate an alert mail, sent to -AlertRecipient. R1 is audit only.
+
+    STATUS: detection and R1/R2/R3 routing by count were observed in the v0.3 lab campaign
+    (see testing/test-matrix.csv). The block action was NOT validated, because simulation mode
+    does not enforce BlockAccess. Re-check parameter behaviour against current Security &
+    Compliance PowerShell documentation before any use outside a lab.
 
     Requires an existing session to a LAB tenant: Connect-IPPSSession. Never run against an
     employer or client tenant.
 
 .EXAMPLE
-    ./New-LabDlpPolicy.ps1 -WhatIf
+    ./New-LabDlpPolicy.ps1 -AlertRecipient admin@lab.example -WhatIf
 
 .EXAMPLE
-    ./New-LabDlpPolicy.ps1 -Mode TestWithNotifications -BlockThreshold 5 -StrictThreshold 20
+    ./New-LabDlpPolicy.ps1 -AlertRecipient admin@lab.example -Mode TestWithNotifications -BlockThreshold 5 -StrictThreshold 20
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
@@ -31,6 +35,10 @@ param(
 
     [ValidateRange(3, 500)]
     [int]$StrictThreshold = 20,
+
+    [Parameter(Mandatory)]
+    [ValidatePattern('^[^@\s]+@[^@\s]+\.[^@\s]+$')]
+    [string]$AlertRecipient,
 
     [string]$PolicyName = 'PV-POL-001 External email - bank account data'
 )
@@ -51,9 +59,9 @@ function New-IbanCondition {
         [int]$Max = 0
     )
     $condition = @{
-        Name          = 'International banking account number (IBAN)'
-        minCount      = "$Min"
-        minConfidence = '85'
+        Name            = 'International banking account number (IBAN)'
+        minCount        = "$Min"
+        confidencelevel = 'High'
     }
     if ($Max -gt 0) { $condition['maxCount'] = "$Max" }
     return , @($condition)
@@ -82,6 +90,7 @@ if ($PSCmdlet.ShouldProcess($PolicyName, "Create DLP policy (Exchange, mode $Mod
         -Comment 'banking-dlp-controls-lab | UC-001 | spec policies/PV-POL-001.yaml' | Out-Null
 }
 
+$created = 0
 foreach ($rule in $rules) {
     $params = @{
         Name                                = $rule.Name
@@ -96,12 +105,27 @@ foreach ($rule in $rules) {
         $params['BlockAccess'] = $true
         if ($rule.Override) { $params['NotifyAllowOverride'] = 'WithJustification' }
     }
-    if ($rule.Alert) { $params['GenerateAlert'] = 'SiteAdmin' }
+    if ($rule.Alert) { $params['GenerateAlert'] = @($AlertRecipient) }
 
     if ($PSCmdlet.ShouldProcess($rule.Name, 'Create DLP rule')) {
-        New-DlpComplianceRule @params | Out-Null
+        try {
+            New-DlpComplianceRule @params | Out-Null
+            $created++
+        }
+        catch {
+            Write-Error ("Rule '{0}' failed: {1}. The policy '{2}' exists with {3} of {4} rules. Fix the cause, then remove the policy (Remove-DlpCompliancePolicy) and rerun." -f $rule.Name, $_.Exception.Message, $PolicyName, $created, $rules.Count)
+            throw
+        }
     }
 }
 
-Write-Output "Done. Policy '$PolicyName' in mode $Mode. Allow time for policy distribution before running TC-001 to TC-003."
+if ($WhatIfPreference) {
+    Write-Output 'WhatIf: nothing was created.'
+    return
+}
+if ($created -ne $rules.Count) {
+    throw "Only $created of $($rules.Count) rules were created."
+}
+
+Write-Output "Done. Policy '$PolicyName' in mode $Mode with $created rules. Allow time for policy distribution before running TC-001 to TC-003."
 Write-Output 'Next: run Export-DlpConfiguration.ps1 to capture the configuration as evidence.'
