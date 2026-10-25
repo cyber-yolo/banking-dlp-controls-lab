@@ -15,3 +15,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
 - Regulatory mapping methodology and draft mapping (references to verify).
 - Governance: lifecycle, RACI, triage playbook, exception management, KPI/KRI.
 - Symantec DLP design and Purview vs Symantec matrix (design only).
+- Purview lab campaign v0.3 on a trial tenant: 6 runs passed (SMOKE-001, TC-001, TC-002, TC-003a, TC-003b, TC-003c). Observed: IBAN detection at High confidence, R1/R2/R3 routing by count, docx attachment extraction, negative control, external delivery. Redacted evidence in `evidence-public/`, including a configuration export of PV-POL-001.
+- Troubleshooting guide `docs/lab-troubleshooting/purview-dlp-email.md` (550 5.7.501, custom domain, reading Activity Explorer and message trace).
+- `validate-repo` detects lab identifiers listed in a local, git-ignored `.lab-denylist`.
+
+### Changed
+
+- `New-LabDlpPolicy.ps1`: alert recipient is an SMTP address (`-AlertRecipient`), the script stops when a rule fails to create, and thresholds use `confidencelevel`.
+- Published evidence moved from `evidence/` to `evidence-public/`. `evidence/` stays git-ignored for raw files.
+- Assumptions and limits updated (A-01, A-04, GAP-03, GAP-04 closed; GAP-05 and a `DistributionStatus` note added).
+- TC-010, TC-011 and TC-012 closed as NOT RUN: the trial tenant was disabled on 25 October 2026. TC-004 to TC-009 remain NOT RUN (Endpoint DLP needs a Windows 11 VM).
+- The block action is not validated: simulation mode does not enforce `BlockAccess`.
+
+### Fixed
+
+- Test matrix: added the missing SMOKE-001 evidence file and corrected its link.
