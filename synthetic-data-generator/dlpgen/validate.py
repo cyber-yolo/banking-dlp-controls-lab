@@ -2,6 +2,10 @@
 
 validate_output: every generated file exists, matches its manifest hash and carries the markers.
 validate_repo:   no real-looking sensitive data or secrets in versioned text files (pre-commit / CI).
+
+Lab-specific identifiers (custom lab domain, tenant name) are never stored in the repository. List them,
+one per line, in a git-ignored file named `.lab-denylist` at the scanned root; any occurrence in a
+versioned text file is reported without printing the term itself. Lines starting with `#` are comments.
 """
 
 from __future__ import annotations
@@ -20,6 +24,7 @@ SKIP_DIRS = {".git", ".venv", "venv", "output", "evidence", "lab-exports", "__py
 IBAN_LENGTHS = {"CH": 21, "LI": 21, "LU": 20, "DE": 22, "FR": 27, "BE": 16, "NL": 18, "AT": 20, "IT": 27, "ES": 24, "GB": 22, "IE": 22, "PT": 25, "MC": 27}
 EXAMPLE_EMAIL_SUFFIXES = (".example", ".test", ".invalid", ".localhost", "example.com", "example.org", "example.net")
 ALLOWED_TENANT_LABELS = {"contoso", "fabrikam"}
+DENYLIST_FILE = ".lab-denylist"
 
 RE_IBAN = re.compile(r"\b[A-Z]{2}\d{2}(?: ?[A-Z0-9]){10,30}")
 RE_PAN = re.compile(r"(?<![\w-])(?:\d[ -]?){12,18}\d(?![\w-])")
@@ -44,9 +49,26 @@ def _mask(value: str) -> str:
     return value[:4] + "..." + value[-2:] if len(value) > 8 else "***"
 
 
-def scan_text(text: str, path: str = "<text>") -> list[Finding]:
+def load_denylist(root: Path) -> tuple[str, ...]:
+    """Local, git-ignored list of lab identifiers that must never appear in versioned files."""
+    file = Path(root) / DENYLIST_FILE
+    if not file.is_file():
+        return ()
+    terms = []
+    for raw in file.read_text(encoding="utf-8").splitlines():
+        term = raw.strip().lower()
+        if term and not term.startswith("#"):
+            terms.append(term)
+    return tuple(terms)
+
+
+def scan_text(text: str, path: str = "<text>", denylist: tuple[str, ...] = ()) -> list[Finding]:
     findings = []
     for lineno, line in enumerate(text.splitlines(), start=1):
+        lowered = line.lower()
+        for index, term in enumerate(denylist, start=1):
+            if term in lowered:
+                findings.append(Finding(path, lineno, "denylist", f"local denylist term #{index}"))
         for match in RE_IBAN.finditer(line):
             compact = match.group(0).replace(" ", "")
             length = IBAN_LENGTHS.get(compact[:2])
@@ -76,6 +98,7 @@ def scan_text(text: str, path: str = "<text>") -> list[Finding]:
 
 def validate_repo(root: Path) -> list[Finding]:
     root = Path(root).resolve()
+    denylist = load_denylist(root)
     findings = []
     for path in sorted(root.rglob("*")):
         if not path.is_file() or path.suffix.lower() not in TEXT_EXTENSIONS:
@@ -86,7 +109,7 @@ def validate_repo(root: Path) -> list[Finding]:
             text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
-        findings += scan_text(text, str(path.relative_to(root)))
+        findings += scan_text(text, str(path.relative_to(root)), denylist)
     return findings
 
 
