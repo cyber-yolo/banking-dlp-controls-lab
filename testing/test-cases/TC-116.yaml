@@ -1,0 +1,22 @@
+test_id: TC-116
+type: false-positive
+use_case_id: UC-010
+policy: SY-POL-005-R1
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Same as TC-114
+test_data:
+  scenario: "missing - AML training material without client ID (to add to config.example.yaml)"
+  file: ""
+  occurrences: {aml: 1+, client_id: 0}
+  sha256: "<from output/manifest.json once the scenario exists>"
+steps:
+  - Send the training file to the external test mailbox.
+expected:
+  incident: None (proximity rule needs a client ID)
+  response: Delivered
+blocker: The corpus has no AML-without-client-ID scenario; the same gap blocks the UC-010 negative test on Purview.
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

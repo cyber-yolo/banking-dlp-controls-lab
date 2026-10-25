@@ -1,0 +1,21 @@
+test_id: TC-107
+type: boundary
+use_case_id: UC-003
+policy: SY-POL-002 (IBAN low count, visibility)
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Same as TC-104; file is unlabelled
+test_data:
+  scenario: SCN-002
+  file: SCN-002_UC-001_boundary-below.docx
+  occurrences: {iban: 4}
+  sha256: "613611bdd720a0d9f697cb769cf0397d5efa4290b5bb2869d16bede88b4da2d7"
+steps:
+  - Copy the file to the non-approved USB device.
+expected:
+  incident: Info severity, logged
+  response: Copy allowed (UC-003 boundary expectation, allow + audit)
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

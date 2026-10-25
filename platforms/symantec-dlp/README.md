@@ -24,9 +24,36 @@ Same use cases, same control objectives, same synthetic test files, same accepta
 | Policy actions | Response rules (block, notify, user cancel with justification, redirect, modify message) | Smart response rules for analyst actions |
 | Alerts, Activity Explorer | Incident reports, incident queues, status and severity attributes | Remediation workflow configured in Enforce |
 
-## Policy design example
+## Policies
 
-See `policy-design/SY-POL-001.yaml` (translation of PV-POL-001).
+All specs are design only. None has been deployed or tested.
+
+| Policy | Translates | Use cases | Components | Spec | Tests |
+|---|---|---|---|---|---|
+| SY-POL-001 External email, bank account data | PV-POL-001 | UC-001 | Network Prevent for Email | `policy-design/SY-POL-001.yaml` | TC-101 to TC-103 |
+| SY-POL-002 Endpoint egress of restricted data | PV-POL-002 | UC-003 (primary), UC-002, 007, 008, 009 | Endpoint Prevent | `policy-design/SY-POL-002.yaml` | TC-104 to TC-107 |
+| SY-POL-003 Generative AI | PV-POL-003 | UC-004 | Endpoint Prevent, Network Prevent for Web | `policy-design/SY-POL-003.yaml` | TC-108 to TC-113 |
+| SY-POL-004 KYC files shared externally | PV-POL-004 (backlog) | UC-005 | Network Discover, Network Protect | `policy-design/SY-POL-004.yaml` | TC-117 |
+| SY-POL-005 AML tipping-off | PV-POL-006 (backlog) | UC-010 | Network Prevent for Email, Endpoint Prevent (print) | `policy-design/SY-POL-005.yaml` | TC-114 to TC-116 |
+| SY-POL-006 to 010 | | UC-011 to UC-015 | | not designed | |
+
+Coverage, limits and test status per use case: `comparison/purview-vs-symantec.csv`. Test rows: `testing/test-matrix.csv` (platform `Symantec DLP`, status `N/A`).
+
+## Named gaps
+
+| Gap | Use case | Why | Consequence |
+|---|---|---|---|
+| Teams has no native inline control | UC-006, and the Teams channel of UC-010 | No Symantec inline inspection of Teams messages assumed for 16.x on-premises | PAN in Teams and tipping-off by chat are not covered on the Symantec side. TC-118 kept for traceability only |
+| SharePoint/OneDrive control is scan-based | UC-005 | Network Discover finds the file at the next scan; Purview blocks at share time | Exposure window = scan interval + remediation time; TC-117 measures it. A cloud CASB would close it but is a separate product |
+| No send-time justification on email | UC-001, UC-010 | Network Prevent for Email blocks or modifies; it has no equivalent of the Purview policy tip override | Block plus a documented release process |
+| No native aggregation alert | UC-009 | No threshold alert equal to the Purview aggregation assumed | Saved report or SIEM correlation |
+| Missing corpus scenario | UC-010 | No AML-without-client-ID file in `config.example.yaml` | TC-116 (and the UC-010 negative test on Purview) cannot run until it is added |
+
+## Test data
+
+Symantec tests reuse the Purview corpus file for file, so a future lab run compares like with like. Where a Purview run already recorded a SHA-256 (SCN-001, 002, 003, 004, 011 docx), the same hash is referenced; other files say `manifest`, to be filled from `output/manifest.json` of the run.
+
+Note: regenerating `config.example.yaml` in a different environment gave different docx hashes from the ones recorded in the lab (library versions differ). Record the generator environment with the manifest, and check the hash of the file actually used before each run.
 
 ## Incident workflow (design)
 

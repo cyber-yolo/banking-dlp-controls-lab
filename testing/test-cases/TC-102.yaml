@@ -1,0 +1,22 @@
+test_id: TC-102
+type: negative
+use_case_id: UC-001
+policy: SY-POL-001
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-002
+preconditions:
+  - Same as TC-101
+test_data:
+  scenario: SCN-004
+  file: SCN-004_UC-001_negative.docx
+  occurrences: {}
+  sha256: "2131fc522d097b8cbefacfd018bf1530205a6faa54256ceed1addffaffecb958"
+steps:
+  - Send the file to the external test mailbox; record the UTC time.
+expected:
+  incident: None
+  response: Delivered
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

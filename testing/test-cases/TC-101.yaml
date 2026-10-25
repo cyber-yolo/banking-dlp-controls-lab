@@ -1,0 +1,24 @@
+test_id: TC-101
+type: positive
+use_case_id: UC-001
+policy: SY-POL-001 (IBAN count medium)
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-001
+preconditions:
+  - SY-POL-001 deployed on Network Prevent for Email, response rules recorded
+  - Sender is a monitored user; recipient is the external test mailbox
+test_data:
+  scenario: SCN-001
+  file: SCN-001_UC-001_positive.docx
+  occurrences: {iban: 10}
+  sha256: "212933cf91025ed4111ca5cae4db7c2997a8350d5c20282f83cdd842ae0da74c"
+steps:
+  - Send the file as an attachment to the external test mailbox; record the UTC time.
+  - Search the incident list for the sender and time window.
+expected:
+  incident: Medium severity, rule IBAN count medium, match count 10
+  response: Block SMTP message; sender notified with the release process
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

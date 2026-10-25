@@ -1,0 +1,21 @@
+test_id: TC-106
+type: negative
+use_case_id: UC-003
+policy: SY-POL-002
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Same as TC-104
+test_data:
+  scenario: SCN-004
+  file: SCN-004_UC-001_negative.docx
+  occurrences: {}
+  sha256: "2131fc522d097b8cbefacfd018bf1530205a6faa54256ceed1addffaffecb958"
+steps:
+  - Copy the file to the non-approved USB device.
+expected:
+  incident: None
+  response: Copy allowed
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

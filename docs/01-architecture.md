@@ -69,7 +69,7 @@ The rule: **L1 never references a vendor feature.** A use case says "block exter
 | `data-classification/` | Single source of truth for levels and data categories | `taxonomy.yaml`, `data-catalog.csv` |
 | `use-cases/` | Vendor-independent risk scenarios with detection intent, thresholds and acceptance criteria | `catalog.csv`, `UC-001.yaml` |
 | `platforms/microsoft-purview/` | Purview-specific implementation and lab scripts | `policies/PV-POL-00x.yaml`, `custom-sits/*.xml`, `scripts/*.ps1` |
-| `platforms/symantec-dlp/` | Translation of the same use cases to Symantec DLP concepts | `README.md`, `policy-design/SY-POL-001.yaml` |
+| `platforms/symantec-dlp/` | Translation of the same use cases to Symantec DLP concepts | `README.md`, `policy-design/SY-POL-001.yaml` to `SY-POL-005.yaml` |
 | `testing/` | How tests are designed, run and recorded | `test-strategy.md`, `test-matrix.csv` |
 | `synthetic-data-generator/` | Reproducible synthetic corpus with manifest and hashes | `dlpgen/`, `config.example.yaml` |
 | `operations/` | Run model: lifecycle, triage, exceptions | `*.md`, `exceptions-register.csv` |

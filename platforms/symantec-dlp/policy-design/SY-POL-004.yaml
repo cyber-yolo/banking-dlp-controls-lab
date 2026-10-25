@@ -1,0 +1,35 @@
+policy_id: SY-POL-004
+name: "SY-POL-004 KYC files shared externally - discovery and remediation"
+status: design-only
+lab_tested: false
+translates: PV-POL-004 (backlog, no Purview spec yet)
+use_cases: [UC-005]
+control_objectives: [CO-03]
+target_version_assumption: "16.x"
+components: [Enforce Server, Network Discover (SharePoint and file share targets), Network Protect (remediation)]
+intent: >
+  Find KYC dossiers stored in collaboration sites that are shared with external users or anyone links,
+  and remediate. This is a scan-based design, not an inline control.
+protected_data: [DC-02, DC-13]
+detection_rules:
+  - rule: KYC dossier
+    conditions_any_of:
+      - IDM on synthetic KYC form v1
+      - Custom Data Identifier Client ID with keyword context plus KYC keyword list
+      - Label metadata L3 or L4 (to confirm per version)
+    severity: High
+targets:
+  - SharePoint scan target (KYC and onboarding sites), incremental scan, schedule daily in the design
+  - Permission data (external or anyone access) read from the scan, if the version exposes it; otherwise sharing state comes from the SharePoint audit log, outside Symantec
+response_rules:
+  - actions: [Network Protect - Quarantine file (or copy to secure location), Notify data owner, Incident to KYC owner queue]
+exceptions:
+  - type: user
+    condition: Named external auditor, recorded in exceptions-register.csv
+design_notes:
+  - Gap named for UC-005: Purview blocks external access at share time; Network Discover finds the file at the next scan. Exposure window equals the scan interval plus remediation time.
+  - Cloud inline options (CloudSOC / CASB API for Microsoft 365) could close the gap but are a separate product and licence; not assumed.
+test_protocol: [TC-117]
+known_gaps:
+  - Scan-based, not inline: share is not blocked at the time it happens.
+  - No lab: scan coverage and remediation not verified.

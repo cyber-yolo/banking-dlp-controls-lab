@@ -1,0 +1,21 @@
+test_id: TC-112
+type: negative
+use_case_id: UC-004
+policy: SY-POL-003
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Endpoint Prevent agent on a supported browser; URL lists "Non-sanctioned GenAI" and "Sanctioned AI" versions recorded
+test_data:
+  scenario: SCN-004
+  file: SCN-004_UC-001_negative.txt
+  occurrences: {}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Paste the text into the non-sanctioned GenAI site.
+expected:
+  incident: None
+  response: Paste allowed
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

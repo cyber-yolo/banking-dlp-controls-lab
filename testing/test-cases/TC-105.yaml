@@ -1,0 +1,22 @@
+test_id: TC-105
+type: exception
+use_case_id: UC-003
+policy: SY-POL-002 (approved device definition)
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-005
+preconditions:
+  - Same as TC-104; USB device matches the approved encrypted device definition; user is named in the exception register
+test_data:
+  scenario: SCN-001
+  file: SCN-001_UC-001_positive.docx
+  occurrences: {iban: 10}
+  sha256: "212933cf91025ed4111ca5cae4db7c2997a8350d5c20282f83cdd842ae0da74c"
+steps:
+  - Copy the file to the approved device.
+expected:
+  incident: Logged, no block
+  response: Copy allowed, no pop-up
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

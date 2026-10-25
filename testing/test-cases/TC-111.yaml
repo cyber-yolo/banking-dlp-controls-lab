@@ -1,0 +1,21 @@
+test_id: TC-111
+type: multi-data
+use_case_id: UC-004
+policy: SY-POL-003-R2
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Endpoint Prevent agent on a supported browser; URL lists "Non-sanctioned GenAI" and "Sanctioned AI" versions recorded
+test_data:
+  scenario: SCN-009
+  file: SCN-009_UC-004_multi-data.docx
+  occurrences: {kyc: 3, iban: 2}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Upload the file to the non-sanctioned GenAI site.
+expected:
+  incident: Medium severity
+  response: Upload blocked unless justified
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []
