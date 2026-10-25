@@ -1,7 +1,7 @@
 policy_id: PV-POL-001
 name: "PV-POL-001 External email - bank account data"
-status: designed
-lab_tested: false
+status: lab-tested
+lab_tested: true
 use_cases: [UC-001]
 control_objectives: [CO-02]
 intent: >
@@ -56,9 +56,28 @@ exceptions:
   - type: recipient_domain_in
     source: exception register (EXC-yyyy-nnn), approved correspondent domains
 deployment:
-  current_stage: S0
+  current_stage: S1
   mode: TestWithoutNotifications
 test_protocol: [TC-001, TC-002, TC-003]
+lab_test:
+  campaign: v0.3
+  environment: Microsoft 365 E5 trial tenant, disabled on 25 October 2026
+  mode: S1 simulation (TestWithoutNotifications)
+  passed: [SMOKE-001, TC-001, TC-002, TC-003a, TC-003b, TC-003c]
+  not_run: [TC-010, TC-011]
+  validated:
+    - IBAN detection at High confidence (85)
+    - R1/R2/R3 routing by IBAN count (1-4, 5-19, 20+)
+    - Content extraction from docx attachments
+    - Negative control (no match on SCN-004)
+  not_validated:
+    - Block and block with justification. Simulation mode does not enforce BlockAccess; the message is still delivered.
+    - Policy tips and user notifications (TestWithoutNotifications).
+    - False positive (TC-010) and image false negative (TC-011) cases.
+  evidence:
+    - evidence-public/test-runs/
+    - evidence-public/config-export/20261020T223542Z/
+    - testing/test-matrix.csv
 promotion_criteria: See platforms/microsoft-purview/README.md, controlled rollout
 owner: Head of Client Data
 review_frequency: Quarterly, and after any business process change
@@ -66,3 +85,4 @@ license_dependency: Exchange DLP (E3 or equivalent)
 known_limits:
   - IBANs inside password-protected archives are not inspected.
   - IBANs in images require OCR capability (not assumed).
+  - Block actions (R2, R3) are specified but not validated in the lab, see lab_test.not_validated.

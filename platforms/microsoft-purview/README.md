@@ -1,6 +1,6 @@
 # Microsoft Purview implementation
 
-Status: designed, not lab-tested. Feature names and licensing must be re-checked against current Microsoft documentation during v0.3, as Purview evolves quickly.
+Status: PV-POL-001 lab-tested in simulation (v0.3, block action not validated); PV-POL-002 and PV-POL-003 designed, not lab-tested. See the Status table in the root README. Feature names and licensing must be re-checked against current Microsoft documentation during v0.3, as Purview evolves quickly.
 
 ## Architecture
 
