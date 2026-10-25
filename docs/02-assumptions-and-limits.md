@@ -33,6 +33,7 @@
 - No official test range exists for IBANs. Synthetic IBANs use a zero bank code and the literal `SYNTH` in the account part to make collision with a real account practically impossible; residual risk is documented, not eliminated.
 - Swiss AHV/AVS numbers and Luxembourg national identification numbers are **not generated** in v0.x: any checksum-valid value could belong to a real person. Detection of these types is documented but not tested.
 - Purview policy distribution and endpoint sync introduce delays; tests record timestamps and allow for propagation before concluding.
+- The configuration export of 20 October 2026 (`20261020T223542Z`) shows `DistributionStatus = Pending` and `DistributionSyncStatus = Success`. The commit message for that export ("policy Success") refers to the sync status only. The policy was effective in practice: TC-003b produced an alert the same evening. Treat `DistributionStatus` as informational and confirm distribution by observed behaviour.
 - Audit search cmdlets and the portal search need the admin account in *Organization Management* in this setup. Audit events take 60 to 90 minutes to appear after activity. See `lab-troubleshooting/purview-audit.md`.
 
 ## Open gaps
