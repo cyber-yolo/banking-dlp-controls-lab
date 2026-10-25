@@ -26,6 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
 - Assumptions and limits updated (A-01, A-04, GAP-03, GAP-04 closed; GAP-05 and a `DistributionStatus` note added).
 - TC-010, TC-011 and TC-012 closed as NOT RUN: the trial tenant was disabled on 25 October 2026. TC-004 to TC-009 remain NOT RUN (Endpoint DLP needs a Windows 11 VM).
 - The block action is not validated: simulation mode does not enforce `BlockAccess`.
+- README Status table, Purview README and `PV-POL-001.yaml` aligned with the v0.3 results: PV-POL-001 set to `lab-tested` (S1 simulation, block not validated), custom SIT rule package marked imported but not tested.
 
 ### Fixed
 
