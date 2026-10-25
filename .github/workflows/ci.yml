@@ -25,7 +25,7 @@ jobs:
           find . -name "*.json" -not -path "./synthetic-data-generator/output/*" -print0 \
             | xargs -0 -r -n1 python -c 'import json, sys; json.load(open(sys.argv[1], encoding="utf-8-sig"))'
       - name: Markdown lint
-        uses: DavidAnson/markdownlint-cli2-action@v16
+        uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           globs: "**/*.md"
 
