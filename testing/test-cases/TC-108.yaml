@@ -1,0 +1,22 @@
+test_id: TC-108
+type: context-with
+use_case_id: UC-004
+policy: SY-POL-003-R2
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-008
+preconditions:
+  - Endpoint Prevent agent on a supported browser; URL lists "Non-sanctioned GenAI" and "Sanctioned AI" versions recorded
+test_data:
+  scenario: SCN-007
+  file: SCN-007_UC-004_context-with.txt
+  occurrences: {client_id: 3}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Paste the text into the non-sanctioned GenAI site in a supported browser.
+expected:
+  incident: Medium severity
+  response: User Cancel pop-up with justification; paste blocked unless justified
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

@@ -1,0 +1,23 @@
+test_id: TC-117
+type: channel
+use_case_id: UC-005
+policy: SY-POL-004
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Network Discover target on the lab KYC site; scan interval recorded
+test_data:
+  scenario: SCN-009
+  file: SCN-009_UC-004_multi-data.docx
+  occurrences: {kyc: 3, iban: 2}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Upload the file to the KYC site and share it with an external guest; record the UTC time.
+  - Wait for the next scan; record the scan time and the remediation time.
+expected:
+  incident: High severity at the next scan
+  response: File quarantined; owner notified
+  gap_measure: Exposure window = remediation time minus share time (Purview blocks at share time)
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

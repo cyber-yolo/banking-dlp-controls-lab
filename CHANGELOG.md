@@ -18,6 +18,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
 - Purview lab campaign v0.3 on a trial tenant: 6 runs passed (SMOKE-001, TC-001, TC-002, TC-003a, TC-003b, TC-003c). Observed: IBAN detection at High confidence, R1/R2/R3 routing by count, docx attachment extraction, negative control, external delivery. Redacted evidence in `evidence-public/`, including a configuration export of PV-POL-001.
 - Troubleshooting guide `docs/lab-troubleshooting/purview-dlp-email.md` (550 5.7.501, custom domain, reading Activity Explorer and message trace).
 - `validate-repo` detects lab identifiers listed in a local, git-ignored `.lab-denylist`.
+- Symantec DLP design v0.9 (#31): SY-POL-002 (endpoint egress, UC-003), SY-POL-003 (GenAI, UC-004), SY-POL-004 (Discover, UC-005), SY-POL-005 (AML tipping-off, UC-010); test cases TC-101 to TC-118, all design only / not tested; named gaps for Teams (UC-006) and scan-based SharePoint control (UC-005).
 
 ### Changed
 
@@ -26,6 +27,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
 - Assumptions and limits updated (A-01, A-04, GAP-03, GAP-04 closed; GAP-05 and a `DistributionStatus` note added).
 - TC-010, TC-011 and TC-012 closed as NOT RUN: the trial tenant was disabled on 25 October 2026. TC-004 to TC-009 remain NOT RUN (Endpoint DLP needs a Windows 11 VM).
 - The block action is not validated: simulation mode does not enforce `BlockAccess`.
+- Purview vs Symantec matrix: all 15 use cases listed, with policy IDs and separate Purview and Symantec test status. UC-012 and UC-014 Symantec coverage changed from "Partial (design)" to "Not designed", as no spec exists.
 
 ### Fixed
 

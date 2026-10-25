@@ -1,0 +1,25 @@
+test_id: TC-103
+type: boundary
+use_case_id: UC-001
+policy: SY-POL-001
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-003
+preconditions:
+  - Same as TC-101; match count ranges 1-4, 5-19, >=20 as in SY-POL-001
+test_data:
+  - {id: TC-103a, scenario: SCN-002, file: SCN-002_UC-001_boundary-below.docx, occurrences: {iban: 4}, sha256: "613611bdd720a0d9f697cb769cf0397d5efa4290b5bb2869d16bede88b4da2d7"}
+  - {id: TC-103b, scenario: SCN-003, file: SCN-003_UC-001_boundary-at.docx, occurrences: {iban: 5}, sha256: "fa4f6a6bcdb3e3542d07875117f8882dcbfb9177b002238e5f4e6fa8a1fec911"}
+  - {id: TC-103c, scenario: SCN-011, file: SCN-011_UC-001_boundary-above.docx, occurrences: {iban: 20}, sha256: "585082f73f6cffb1088f79602e1f741547cb6a76ad7e48d507a59fc4660efef3"}
+steps:
+  - Send each file separately to the external test mailbox.
+expected:
+  TC-103a: Low severity, sender notified, delivered
+  TC-103b: Medium severity, Block SMTP message
+  TC-103c: High severity, Block SMTP message
+failure_analysis_hint: >
+  Same question as TC-003: does the data identifier count unique matches or occurrences, and is the
+  lower bound inclusive. Purview counted 5 on SCN-003 (TC-003b PASS); record the Symantec count.
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

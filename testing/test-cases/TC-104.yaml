@@ -1,0 +1,23 @@
+test_id: TC-104
+type: positive
+use_case_id: UC-003
+policy: SY-POL-002 (L3/L4 content, removable storage)
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-004
+preconditions:
+  - Windows endpoint with the Endpoint Prevent agent, policy received (record the agent policy version)
+  - USB device not in the approved device definition
+test_data:
+  scenario: SCN-001
+  file: SCN-001_UC-001_positive.docx
+  occurrences: {iban: 10}
+  sha256: "212933cf91025ed4111ca5cae4db7c2997a8350d5c20282f83cdd842ae0da74c"
+steps:
+  - Copy the file to the USB device; record the UTC time and the pop-up.
+expected:
+  incident: High severity, destination Removable storage
+  response: Copy blocked, endpoint notification with guideline link
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

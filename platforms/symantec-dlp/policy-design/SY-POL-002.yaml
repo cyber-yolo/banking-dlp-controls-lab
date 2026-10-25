@@ -1,0 +1,79 @@
+policy_id: SY-POL-002
+name: "SY-POL-002 Endpoint egress - restricted data"
+status: design-only
+lab_tested: false
+translates: PV-POL-002
+use_cases: [UC-002, UC-003, UC-007, UC-008, UC-009]
+primary_use_case: UC-003
+control_objectives: [CO-04, CO-05]
+target_version_assumption: "16.x"
+components: [Enforce Server, Endpoint Prevent (agent), Endpoint Server]
+intent: >
+  Control copy, print and upload of L3/L4 banking data from managed Windows endpoints,
+  with approved encrypted USB devices, approved printers and sanctioned cloud domains as the
+  only permitted routes. Same objective and thresholds as PV-POL-002.
+protected_data: [DC-01, DC-02, DC-10, DC-11, DC-14, DC-20, DC-21]
+detection_rules:
+  - rule: L3/L4 content (any of)
+    method: compound rule, any of the conditions below
+    conditions:
+      - Data Identifier IBAN (regional variant covering CH and LU, to confirm), checksum validator, match count >= 5
+      - Custom Data Identifier Client ID (pattern CLT-########) with keyword context (same keyword list as the Purview custom SIT, never "customer")
+      - Indexed Document Matching (IDM) on the synthetic KYC form v1 template
+      - Label metadata L3 or L4 (MIP label detection, availability to confirm per version)
+    severity: High
+  - rule: IBAN low count (visibility only)
+    method: Data Identifier IBAN, match count 1-4
+    severity: Info
+    purpose: Gives the "allow + audit" outcome UC-003 expects on the boundary file
+channel_conditions:
+  removable_storage:
+    monitored_destination: Removable storage device
+    device_definition: Approved encrypted USB, defined by device instance ID pattern (vendor ID, product ID, serial) in Enforce
+    default: block
+    approved_device_group: log only (exception rule on the device definition)
+  print:
+    monitored_destination: Printer/Fax
+    default: user cancel with justification
+    approved_group: log only (approved secure print queue)
+  browser_upload:
+    monitored_destination: HTTP/HTTPS from supported browsers (Endpoint Prevent)
+    url_lists: [Sanctioned cloud storage, Personal webmail, Non-sanctioned cloud storage]
+    sanctioned: log only
+    personal_webmail: user cancel with justification
+    non_sanctioned: user cancel with justification
+  network_share:
+    monitored_destination: Copy to network share
+    default: log only
+  application_file_access:
+    monitored_applications: [Unsanctioned sync clients]
+    default: block
+response_rules:
+  - severity: High
+    channel: removable storage, non-approved device
+    actions: [Endpoint Prevent - Block, Endpoint Prevent - Notify (guideline link), Set incident status New]
+  - severity: High
+    channel: print, browser upload to personal webmail or non-sanctioned cloud
+    actions: [Endpoint Prevent - User Cancel (justification options aligned with Purview override reasons), Notify]
+  - severity: Info
+    channel: any
+    actions: [Log incident, no user notification]
+  - aggregation: >
+      UC-009 signal: 10 or more High incidents from one user in 1 hour. Symantec has no native
+      threshold alert equal to the Purview aggregation; designed as a saved incident report with a
+      scheduled email, or as a SIEM correlation rule. Behaviour analytics (UEBA) is a separate licence.
+user_notification: Endpoint pop-up with guideline link; text reviewed with the same tip text as Purview
+exceptions:
+  - type: device
+    condition: Approved encrypted USB device definition, named users only, time-bound (exceptions-register.csv)
+  - type: printer
+    condition: Approved secure print queue
+design_notes:
+  - USB device control at OS level (allow or block the device class) is a separate endpoint control; this policy only inspects content written to devices the OS allows.
+  - Endpoint Prevent inspects at the agent; offline endpoints apply the last policy received and send incidents on reconnection. Sync delay to record during tests, as for Purview.
+  - User Cancel is the closest equivalent to Purview block with override; the justification list is configured in Enforce.
+test_protocol: [TC-104, TC-105, TC-106, TC-107]
+known_gaps:
+  - No lab: detection, device definitions and pop-up behaviour not verified.
+  - Unmanaged devices and non-Windows endpoints are out of scope, as for Purview.
+  - Browser coverage depends on the supported browser list of the agent version.

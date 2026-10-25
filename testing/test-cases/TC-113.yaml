@@ -1,0 +1,21 @@
+test_id: TC-113
+type: channel
+use_case_id: UC-004
+policy: SY-POL-003 (sanctioned AI exception)
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Endpoint Prevent agent on a supported browser; URL lists "Non-sanctioned GenAI" and "Sanctioned AI" versions recorded
+test_data:
+  scenario: SCN-007
+  file: SCN-007_UC-004_context-with.txt
+  occurrences: {client_id: 3}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Paste the text into the sanctioned enterprise assistant.
+expected:
+  incident: Logged, no block
+  response: Paste allowed
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

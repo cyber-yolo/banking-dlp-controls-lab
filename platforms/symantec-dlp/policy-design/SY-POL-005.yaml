@@ -1,0 +1,52 @@
+policy_id: SY-POL-005
+name: "SY-POL-005 AML tipping-off - suspicion information outside compliance"
+status: design-only
+lab_tested: false
+translates: PV-POL-006 (backlog, no Purview spec yet)
+use_cases: [UC-010]
+control_objectives: [CO-06]
+target_version_assumption: "16.x"
+components: [Enforce Server, Network Prevent for Email, Endpoint Prevent (print)]
+intent: >
+  Stop information that a suspicion report has been or may be filed from reaching the client or any
+  person outside the compliance perimeter, and keep the incident itself visible only to MLRO delegates.
+protected_data: [DC-03, DC-01]
+detection_rules:
+  - rule_id: SY-POL-005-R1
+    name: AML vocabulary near client identifier
+    conditions_all_of:
+      - Keyword list "AML vocabulary" (EN, FR, DE; dictionary owned by the MLRO, version recorded) with keyword proximity to
+      - Custom Data Identifier Client ID (CLT-########)
+    proximity: Same window as the Purview custom SIT (to align once PV-POL-006 is written)
+    severity: High
+  - rule_id: SY-POL-005-R2
+    name: AML case label
+    conditions_any_of: [Label metadata L4 from the AML case library (to confirm per version)]
+    severity: High
+recipient_conditions:
+  external: Recipient outside the bank's domains
+  internal_outside_compliance: Recipient not in the compliance directory group (directory group matching through Enforce user groups)
+  exception: Sender and all recipients in the compliance group
+response_rules:
+  - condition: External recipient
+    actions: [Block SMTP message, Neutral sender notification that does not name AML, Severity High, Incident to restricted queue]
+  - condition: Internal recipient outside compliance
+    actions: [Block SMTP message, Neutral sender notification, Release only by an MLRO delegate through the documented release process]
+  - condition: Print outside compliance group
+    actions: [Endpoint Prevent - Block, Neutral notification]
+incident_access:
+  design: >
+    Dedicated policy group "AML restricted". Enforce role "MLRO delegate" is the only role whose
+    incident access conditions include this policy group; other analyst roles exclude it, so they
+    cannot see the incident or its matched content.
+  evidence_expected: Role configuration export and a failed access attempt with an analyst account
+design_notes:
+  - Notification text must not reveal the reason in detail, because the recipient or the sender's contact may be the client.
+  - Justification at send time is not native on the email network path; internal block uses a release process, as in SY-POL-001.
+  - Filing to the FIU uses the official reporting portal, not email; no DLP exception is needed.
+  - Teams is not covered (see UC-006 gap); UC-010 lists Teams as a channel, so this is a named gap for tipping-off as well.
+test_protocol: [TC-114, TC-115, TC-116]
+known_gaps:
+  - No lab: detection and role restriction not verified.
+  - Keyword-based: false positives on AML training material expected; TC-116 needs a corpus scenario that does not exist yet.
+  - Teams channel not covered.
