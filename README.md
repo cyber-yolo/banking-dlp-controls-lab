@@ -31,8 +31,10 @@ Every artefact carries an explicit status. Nothing is claimed as tested until ev
 | Area | Status |
 |---|---|
 | Taxonomy, catalog, use cases | Draft v0.2 |
-| Purview policy specs | Designed, **not lab-tested** |
-| Purview custom SIT rule package | Designed, **not imported** |
+| Purview PV-POL-001 (external email, IBAN) | **Lab-tested in simulation** (S1, v0.3). SMOKE-001, TC-001, TC-002, TC-003a, TC-003b, TC-003c PASS: IBAN detection at High confidence, R1/R2/R3 routing by count, docx attachment extraction, negative control. **Block action not validated**: simulation mode does not enforce `BlockAccess`. Evidence in [`evidence-public/`](evidence-public/), results in [`testing/test-matrix.csv`](testing/test-matrix.csv) |
+| Purview PV-POL-002, PV-POL-003 (endpoint, generative AI) | Designed, **not lab-tested**. TC-004 to TC-009 NOT RUN (Endpoint DLP needs a Windows 11 VM and a lab tenant) |
+| Purview custom SIT rule package | Imported in the v0.3 lab tenant, **not tested**: no policy used it, TC-012 NOT RUN |
+| Purview lab tenant | v0.3 trial tenant disabled on 25 October 2026. TC-010 to TC-012 NOT RUN; any re-run needs a new tenant |
 | Synthetic data generator | Working, unit-tested |
 | Symantec DLP | Design only (no lab licence assumed) |
 | Regulatory mapping | Draft, **all references TO VERIFY** against official texts |
