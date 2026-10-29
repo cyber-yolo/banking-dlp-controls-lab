@@ -42,4 +42,4 @@ python -m pytest -q                                              # unit tests
 
 ## Categories
 
-`iban`, `iban_invalid`, `client_id`, `card_pan`, `kyc`, `aml`, `secrets`, `portfolio`, `transactions`, `hr_salary`, `negative`.
+`iban`, `iban_invalid`, `client_id`, `card_pan`, `kyc`, `aml`, `aml_training`, `secrets`, `portfolio`, `transactions`, `hr_salary`, `negative`.

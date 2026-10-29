@@ -44,8 +44,8 @@ expected_evidence:
   - Proof that DLP analysts outside compliance cannot see incident content (role configuration)
 tests:
   positive: SCN-010 AML memo with client ID to external recipient (expect strict block)
-  negative: Generic AML training material without client identifier (expect no match)
-  context: AML vocabulary without client ID (expect no match or low severity)
+  negative: SCN-014 generic AML training material without client identifier (expect no match)
+  context: SCN-014 AML vocabulary without client ID (expect no match or low severity)
 acceptance_criteria:
   - No override possible on external channel
   - Incident visible only to authorised roles
