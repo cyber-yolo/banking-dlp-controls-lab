@@ -1,0 +1,58 @@
+policy_id: SY-POL-003
+name: "SY-POL-003 Generative AI - client and secret data"
+status: design-only
+lab_tested: false
+translates: PV-POL-003
+use_cases: [UC-004]
+control_objectives: [CO-05]
+target_version_assumption: "16.x"
+components: [Enforce Server, Endpoint Prevent (agent), Network Prevent for Web (ICAP proxy, optional)]
+intent: >
+  Prevent client, KYC, AML and credential data from being pasted or uploaded to non-sanctioned
+  generative AI services, while keeping the sanctioned enterprise assistant usable.
+protected_data: [DC-01, DC-02, DC-03, DC-19, DC-21]
+destinations:
+  url_list_non_sanctioned_genai: Maintained by Security, same content as the Purview service domain group
+  url_list_sanctioned_ai: Enterprise assistant with approved contract and DPA
+detection_rules:
+  - rule_id: SY-POL-003-R1
+    name: L4 and credentials strict block
+    conditions_any_of:
+      - Label metadata L4 (to confirm per version)
+      - Custom Data Identifiers or regex for credential patterns (no built-in equivalent of every Purview credential SIT assumed)
+      - AML keyword list within proximity of Client ID data identifier (same rule as SY-POL-005)
+    severity: High
+  - rule_id: SY-POL-003-R2
+    name: L3 block with justification
+    conditions_any_of:
+      - Label metadata L3
+      - Custom Data Identifier Client ID with keyword context
+      - IDM on synthetic KYC form v1
+    severity: Medium
+  - rule_id: SY-POL-003-R3
+    name: Visibility
+    conditions_any_of: [Any of the data identifiers above without context]
+    severity: Low
+channel_conditions:
+  paste: Endpoint Prevent clipboard paste monitoring into supported browsers, destination URL in non-sanctioned GenAI list
+  upload: Endpoint Prevent HTTP/HTTPS upload from supported browsers; Network Prevent for Web for unmanaged browser paths through the proxy
+  sanctioned_ai: Exception on URL list "sanctioned AI", log only
+response_rules:
+  - rule: SY-POL-003-R1
+    actions: [Endpoint Prevent - Block, Notify pointing to the sanctioned assistant, High severity]
+  - rule: SY-POL-003-R2
+    actions: [Endpoint Prevent - User Cancel with justification, Notify]
+  - rule: SY-POL-003-R3
+    actions: [Log incident only]
+  - network_path:
+      actions: [Network Prevent for Web - Block HTTP/HTTPS post, Network Prevent for Web - Remove HTTP/HTTPS content (confirm per version)]
+design_notes:
+  - Paste inspection and URL-aware conditions depend on the agent version and the browser; to confirm before any claim.
+  - Network Prevent for Web needs TLS interception on the proxy; without it, HTTPS posts are not inspected on the network path.
+  - Text typed by the user (not pasted) is not inspected on either platform; documented limit.
+test_protocol: [TC-108, TC-109, TC-110, TC-111, TC-112, TC-113]
+known_gaps:
+  - No lab: paste and upload detection not verified.
+  - New AI domains appear constantly; the URL list is a maintained list, not a guarantee.
+  - Mobile and unmanaged devices are not covered.
+  - No equivalent of Purview DSPM for AI reporting assumed.

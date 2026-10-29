@@ -1,0 +1,21 @@
+test_id: TC-115
+type: channel
+use_case_id: UC-010
+policy: SY-POL-005-R1 (internal recipient outside compliance)
+platform: Symantec DLP
+lab_tested: false
+preconditions:
+  - Same as TC-114; recipient is an internal mailbox outside the compliance group
+test_data:
+  scenario: SCN-010
+  file: SCN-010_UC-010_positive.docx
+  occurrences: {aml: 2}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Send the file to the internal recipient, then repeat to a compliance group member.
+expected:
+  outside_compliance: Block SMTP message, release only by an MLRO delegate
+  compliance_member: Delivered, no incident
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []

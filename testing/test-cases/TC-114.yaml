@@ -1,0 +1,26 @@
+test_id: TC-114
+type: positive
+use_case_id: UC-010
+policy: SY-POL-005-R1 (external recipient)
+platform: Symantec DLP
+lab_tested: false
+mirrors: TC-012
+preconditions:
+  - SY-POL-005 deployed on Network Prevent for Email; AML dictionary version recorded
+  - Sender outside the compliance group; recipient is the external test mailbox
+  - One analyst account without the MLRO delegate role
+test_data:
+  scenario: SCN-010
+  file: SCN-010_UC-010_positive.docx
+  occurrences: {aml: 2}
+  sha256: "<from output/manifest.json>"
+steps:
+  - Send the file to the external test mailbox.
+  - Open the incident with the MLRO delegate account, then try with the analyst account.
+expected:
+  incident: High severity, policy group AML restricted
+  response: Block SMTP message; neutral sender notification that does not mention AML
+  access: Visible to MLRO delegate only; analyst account cannot list or open it
+actual: ""
+status: N/A               # design only, no Symantec lab (assumption A-03)
+evidence: []
