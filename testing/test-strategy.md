@@ -10,7 +10,7 @@
 | Context | Does keyword context change confidence as designed? | SCN-006 (without), SCN-007 (with) |
 | Multi-data | Do combined categories raise the right rule? | SCN-009 |
 | Exception | Does an approved exception allow the flow and log it? | SCN-001 to an approved domain |
-| False positive | Is look-alike data ignored? | SCN-005 (wrong checksums) |
+| False positive | Is look-alike data ignored? | SCN-005 (wrong checksums), SCN-014 (AML vocabulary without client ID) |
 | False negative | Where can an expected detection be missed? | SCN-001 PNG (no OCR), password-protected archives, unsupported browser |
 | Channel | Same file, different channel: same decision? | SCN-001 via email, SharePoint, USB, browser upload |
 | Regression | Did a policy change alter any previous result? | Full manifest replay |

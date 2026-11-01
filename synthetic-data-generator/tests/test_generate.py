@@ -73,3 +73,12 @@ def test_clean_refuses_foreign_folder(tmp_path):
     (tmp_path / "keep.txt").write_text("not generated")
     with pytest.raises(RuntimeError):
         clean(tmp_path)
+
+
+def test_aml_training_has_vocabulary_but_no_client_id(corpus):
+    out, manifest = corpus
+    text = next(out.glob("SCN-014_*.txt")).read_text()
+    assert "CLT-" not in text
+    assert all(term in text for term in ("suspicious transaction report", "CRF", "money laundering"))
+    entry = next(f for f in manifest["files"] if f["file_id"] == "SCN-014-TXT")
+    assert entry["occurrences"] == {"aml_training_module": 5}

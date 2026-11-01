@@ -94,6 +94,20 @@ def build_aml(rng, n, country, opts):
     return "AML investigation summary", ctx, [Section("Alerts", ["Alert ID", "Client ID", "Scenario", "Status"], rows)], notes, {"aml_alert": n, "client_id": n}
 
 
+def build_aml_training(rng, n, country, opts):
+    fiu = "CRF" if country == "LU" else "MROS"
+    topics = [
+        ("Recognising money laundering", "Placement, layering and integration; typical red flags such as structuring and rapid movement of funds."),
+        ("Escalation", "Unusual activity goes to the compliance team, which decides whether a suspicious transaction report (STR, SAR) is needed."),
+        ("Reporting", f"The compliance team files the declaration de soupcon to the {fiu} through the official reporting portal, never by email."),
+        ("Tipping-off", "Never reveal that a Verdachtsmeldung or any other suspicion report has been or may be filed."),
+        ("Record keeping", "Keep the investigation file in the restricted case library; lutte contre le blanchiment training is renewed every year."),
+    ]
+    rows = [[f"Module {i + 1}", *topics[i % len(topics)]] for i in range(n)]
+    ctx = "Annual anti-money laundering awareness training for all staff. Generic material: it names no person, account or identifier."
+    return "AML awareness training", ctx, [Section("Modules", ["Module", "Topic", "Key point"], rows)], [], {"aml_training_module": n}
+
+
 def build_secrets(rng, n, country, opts):
     notes = ["Configuration excerpt (non-functional example values):"] + v.fake_secrets()
     return "Application configuration", "Deployment notes for the synthetic core banking connector.", [], notes, {"secret": len(v.fake_secrets())}
@@ -135,6 +149,7 @@ BUILDERS = {
     "card_pan": build_card_pan,
     "kyc": build_kyc,
     "aml": build_aml,
+    "aml_training": build_aml_training,
     "secrets": build_secrets,
     "portfolio": build_portfolio,
     "transactions": build_transactions,

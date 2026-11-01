@@ -47,7 +47,6 @@ Coverage, limits and test status per use case: `comparison/purview-vs-symantec.c
 | SharePoint/OneDrive control is scan-based | UC-005 | Network Discover finds the file at the next scan; Purview blocks at share time | Exposure window = scan interval + remediation time; TC-117 measures it. A cloud CASB would close it but is a separate product |
 | No send-time justification on email | UC-001, UC-010 | Network Prevent for Email blocks or modifies; it has no equivalent of the Purview policy tip override | Block plus a documented release process |
 | No native aggregation alert | UC-009 | No threshold alert equal to the Purview aggregation assumed | Saved report or SIEM correlation |
-| Missing corpus scenario | UC-010 | No AML-without-client-ID file in `config.example.yaml` | TC-116 (and the UC-010 negative test on Purview) cannot run until it is added |
 
 ## Test data
 

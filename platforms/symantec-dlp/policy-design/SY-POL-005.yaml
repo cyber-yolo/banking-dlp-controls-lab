@@ -48,5 +48,5 @@ design_notes:
 test_protocol: [TC-114, TC-115, TC-116]
 known_gaps:
   - No lab: detection and role restriction not verified.
-  - Keyword-based: false positives on AML training material expected; TC-116 needs a corpus scenario that does not exist yet.
+  - Keyword-based: false positives on AML training material expected; TC-116 checks this with SCN-014 (AML vocabulary, no client ID).
   - Teams channel not covered.

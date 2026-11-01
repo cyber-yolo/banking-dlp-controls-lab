@@ -197,3 +197,17 @@ scenarios:
     expected_alert: true
     expected_result: Print blocked on non-approved printer, override with justification
     formats: [docx, pdf]
+
+  - id: SCN-014
+    use_case_id: UC-010
+    test_type: false-positive
+    description: AML training material, AML vocabulary without any client ID (tipping-off look-alike)
+    jurisdiction: LU
+    data:
+      - {category: aml_training, count: 5}
+    classification: L1
+    target_channel: exchange-external
+    expected_policy: none
+    expected_action: none
+    expected_alert: false
+    expected_result: Delivered, no match (AML rule requires a client ID within proximity)
