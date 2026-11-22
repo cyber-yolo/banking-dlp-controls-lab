@@ -21,6 +21,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: Se
 - Symantec DLP design v0.9 (#31): SY-POL-002 (endpoint egress, UC-003), SY-POL-003 (GenAI, UC-004), SY-POL-004 (Discover, UC-005), SY-POL-005 (AML tipping-off, UC-010); test cases TC-101 to TC-118, all design only / not tested; named gaps for Teams (UC-006) and scan-based SharePoint control (UC-005).
 - Generator scenario SCN-014 (UC-010 false positive): AML training material with AML vocabulary and no client ID, used by TC-116. Existing scenario files and their hashes are unchanged.
 - Redacted screenshots for SMOKE-001 (alert mails and Alerts list), TC-001, TC-002 (SCN-004), TC-003a (including Activity explorer detail) and TC-003c in `evidence-public/test-runs/`, linked from each run sheet and indexed in `evidence-public/README.md`.
+- Lab rebuild runbook `docs/06-lab-rebuild-runbook.md`: ordered procedure to rebuild the Purview lab on a new trial tenant from the versioned configuration, onboard a Windows 11 VM for Endpoint DLP, run TC-004 to TC-012 and export redacted evidence before the trial ends. Procedure only, not executed; open gaps listed (G-01 to G-11).
 
 ### Changed
 
